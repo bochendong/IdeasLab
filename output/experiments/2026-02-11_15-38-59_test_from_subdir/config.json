@@ -1,0 +1,4 @@
+{
+  "lr": 0.005,
+  "script_file": "split_mnist/SplitMinist.py"
+}

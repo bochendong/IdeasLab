@@ -1,0 +1,12 @@
+{
+  "device": "cuda",
+  "lr": 0.005,
+  "epochs_per_task": 4,
+  "batch_size": 128,
+  "lambda_slice": 2.0,
+  "lambda_feat": 0.5,
+  "use_cosine_head": true,
+  "seed": 42,
+  "script_file": "split_mnist/SplitMinist.py",
+  "experiment_group": "split_mnist"
+}
