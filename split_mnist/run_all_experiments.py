@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # ===== 批量运行所有无 Replay 实验 =====
-"""运行 exp2~exp13（Baseline 为 SplitMinist.py）。已跑过的实验会自动跳过。"""
+"""运行 exp2~exp19（Baseline 为 SplitMinist.py）。已跑过的实验会自动跳过。"""
 import os
 import sys
 import subprocess
@@ -25,6 +25,13 @@ EXPERIMENTS = [
     ("split_mnist/exp11_slice_balance.py", "exp11_slice_balance"),
     ("split_mnist/exp12_slice_margin.py", "exp12_slice_margin"),
     ("split_mnist/exp13_task_inference.py", "exp13_task_inference"),
+    # 顶会思路实验
+    ("split_mnist/exp14_proto_aug.py", "exp14_proto_aug"),
+    ("split_mnist/exp15_prl_base_reserve.py", "exp15_prl_base_reserve"),
+    ("split_mnist/exp16_pass_ssl.py", "exp16_pass_ssl"),
+    ("split_mnist/exp17_ldc_drift.py", "exp17_ldc_drift"),
+    ("split_mnist/exp18_asymmetric_ce.py", "exp18_asymmetric_ce"),
+    ("split_mnist/exp19_proto_aug_si.py", "exp19_proto_aug_si"),
 ]
 
 EXPERIMENTS_ROOT = os.path.join(get_output_dir("split_mnist"), "experiments")
