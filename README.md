@@ -45,6 +45,13 @@
 | **Exp8 Attention + SI** | Attention backbone + SI | **99.1%** | 29.64% | -84.61% | 严重 | `output/.../2026-02-11_17-51-42_exp8_attention_plus_si` |
 | **Exp9 VAE 伪样本** | 每任务 CVAE 生成伪样本参与 CE，无真实回放 | **97.1%** | **40.35%** | -71.37% | 较轻（T0~T3 约 63%～81%） | `output/.../2026-02-11_18-10-46_exp9_vae_pseudo_replay` |
 | **Exp12 Slice margin** | λ_slice_margin=1, margin=0.5，正确 slice max > 其它 + margin | **99.3%** | **26.31%** | -91.30% | 严重（T0≈99.9%, T1≈99.0%, T2≈95.6%, T3≈70.7%, T4=0%） | `output/.../2026-02-11_19-06-57_exp12_slice_margin` |
+| **Exp13 Task inference** | task head 预测任务、推理时用概率加权 slice，λ_task_inference=1 | **77.4%** | **19.81%** | -97.90% | 极严重（T0～T3 几乎全忘，task head 偏向预测最新任务） | `output/.../2026-02-11_19-25-19_exp13_task_inference` |
+| **Exp14 特征空间原型增强** | PASS 风：类均值 + 高斯噪声伪特征参与 CE，proto_aug_r=0.4, n=8/类 | **99.4%** | **27.69%** | -89.52% | 严重（T0≈99.9%, …, T3≈66%） | `output/.../2026-02-11_20-14-56_exp14_proto_aug` |
+| **Exp15 PRL 预留空间** | 顶会 PRL 风：Base 收紧/预留空间，新任务推入预留区 | **99.4%** | **29.00%** | -88.00% | 严重（T0≈99.9%, …, T3≈60%） | `output/.../2026-02-11_20-33-22_exp15_prl_base_reserve` |
+| **Exp16 PASS SSL** | 原型增强 + 自监督（PASS 风） | **98.5%** | **25.90%** | -91.12% | 严重 | `output/.../2026-02-11_20-51-25_exp16_pass_ssl` |
+| **Exp17 LDC 漂移补偿** | 可学习 projector 把特征映射回旧空间，旧类用投影特征与旧原型匹配 | **99.4%** | **26.89%** | -90.61% | 严重（T0≈99.9%, …, T3≈69%） | `output/.../2026-02-11_21-09-31_exp17_ldc_drift` |
+| **Exp18 非对称 CE** | EFC 风：旧类 vs 新类非对称交叉熵，减轻新类主导 | **99.3%** | **23.33%** | -95.23% | 严重（遗忘略重） | `output/.../2026-02-11_21-27-34_exp18_asymmetric_ce` |
+| **Exp19 原型增强 + SI** | Exp14 特征空间原型增强 + λ_si=1 | **99.3%** | **39.52%** | **-73.34%** | 较轻（T0～T3 约 57%～83%） | `output/.../2026-02-11_21-45-37_exp19_proto_aug_si` |
 
 ### 3. 已跑完、仅有 train.log 的实验
 
@@ -61,12 +68,12 @@
 
 | 梯队 | 实验 | Class-IL | BWT | 说明 |
 |------|------|----------|-----|------|
-| 最佳 | **Exp9 VAE 伪样本** | **40.35%** | -71.37% | 每任务 CVAE 生成旧类参与 CE，不存真实样本；遗忘最轻。 |
+| 最佳 | **Exp9 VAE 伪样本**、**Exp19 原型增强+SI** | **40.35%**、**39.52%** | -71.37%、**-73.34%** | Exp9：CVAE 图像伪样本；Exp19：特征空间原型增强 + SI，轻量且接近 Exp9。 |
 | 次佳 | **Exp7 SI** | **34.15%** | -80.88% | 突触重要性正则，与 EWC 互补。 |
-| 有效 | Exp2 更强正则、Exp4 EWC、Exp8 Attention+SI | 29%～29.6% | -85%～-88% | 蒸馏/正则有有限提升。 |
-| 略优 | Exp6 Attention、Exp12 Slice margin | 26.27%、26.31% | -90%～-91% | 略优于 Baseline，单点改进收益有限。 |
-| 持平 | Baseline、Exp11 Slice 平衡 | 25.69%、25.72% | -90%～-92% | 基准与“平衡方差”几乎无增益。 |
-| 更差 | **Exp10 Adapters** | **20.51%** | **-98.61%** | 每任务 adapter + mean 融合，反而加重 slice 竞争。 |
+| 有效 | **Exp15 PRL 预留空间**、Exp2、Exp4、Exp8 | **29.00%**、29%～29.6% | -88%、-85%～-88% | Exp15：Base 预留空间 + 新任务推入预留区；其余为蒸馏/正则。 |
+| 略优 | **Exp14 原型增强**、**Exp17 LDC**、Exp6、Exp12 | **27.69%**、**26.89%**、26.27%、26.31% | -89.5%、-90.6%、-90%～-91% | Exp14：仅特征空间原型增强；Exp17：漂移补偿 projector。 |
+| 持平 | **Exp16 PASS SSL**、Baseline、Exp11 | **25.90%**、25.69%、25.72% | -91.1%、-92.2%、-90.6% | Exp16：原型增强+自监督，与 Baseline 接近。 |
+| 更差 | **Exp18 非对称 CE**、Exp10、Exp13 | **23.33%**、20.51%、19.81% | -95.23%、-98.61%、-97.90% | Exp18：非对称 CE 在本设定下遗忘加重；Exp10/13 见前。 |
 | 崩塌 | Exp3 冻结、Exp5 冻结+强正则 | ～0% / 16.65% | — | 冻结 backbone 在无任务 ID 下无法保持旧类。 |
 
 **单点结论**
@@ -74,13 +81,22 @@
 - **Exp10 Adapters**：每任务 adapter、推理时 mean 融合 → Class-IL 劣于 Baseline，当前设定下“任务专用 adapter”未缓解 slice 竞争。
 - **Exp11 Slice 平衡**：约束各 slice 强度方差（λ=0.5）→ 与 Baseline 同量级，单纯平衡方差收益有限。
 - **Exp12 Slice margin**：正确 slice max > 其它 + margin（λ=1, margin=0.5）→ 与 Baseline/Exp11 同量级，单纯拉大 margin 收益有限。
+- **Exp13 Task inference**：轻量 task head 预测任务 ID，推理时用其概率加权各 slice。Class-IL **19.81%**、BWT **-97.90%**，**劣于 Baseline**；Task-IL 也降至 **77.4%**。group-diff 显示旧类样本几乎全被判成“最新任务”（winner_task_dist 中 W4=100%），task head 严重偏向新任务，路由失效。
 - **Attention（Exp6/Exp8）**：在本设定下对 Class-IL 贡献不明显，Exp8 甚至弱于单用 SI；可能与任务数少、数据简单有关。
 
 **与文献对照**（详见 `doc/SOTA.md`）  
 无回放 Class-IL 在文献中（CIFAR-100 / ImageNet 等）典型在 **20%～40%** 区间，强方法（AdaGauss、DS-AL、VAE/伪样本等）可达 60%+ 或与回放可比。本仓库 **Exp9（40.35%）** 落在该区间上界附近，与“生成式伪样本 / 原型增强”类思路（如 PASS、AdaGauss 的类高斯建模）一致；**SI/蒸馏** 与顶会中正则/重要性加权思路一致，但单靠 slice 平衡/margin（Exp11/12）尚未带来可辨提升。
 
+**新实验（Exp14～Exp19）总结**  
+- **Exp19 原型增强+SI**：Class-IL **39.52%**、BWT **-73.34%**，与 **Exp9（40.35%）** 同档，且只存类均值+噪声、无需 VAE，**推荐作为轻量无回放方案**。  
+- **Exp15 PRL 预留空间**：29.00%、BWT -88%，优于 Baseline 与多数单点方法，说明“为未来类预留空间”有效。  
+- **Exp14 仅原型增强**（无 SI）：27.69%，优于 Baseline，但明显弱于 Exp19，说明**原型增强与 SI 叠加收益大**。  
+- **Exp17 LDC 漂移补偿**：26.89%，略优于 Baseline，projector 补偿有一定作用但有限。  
+- **Exp16 PASS SSL**：25.90%，与 Baseline 持平，当前自监督设计未带来可辨提升。  
+- **Exp18 非对称 CE**：23.33%、BWT -95.23%，**劣于 Baseline**，当前非对称权重或实现未缓解新类主导。
+
 **核心结论**  
-瓶颈在 **Class-IL**：测试时无任务 ID，各 slice 竞争失衡。无真实回放下，**生成式伪样本（Exp9）** 最有效，**SI（Exp7）** 次之；蒸馏/正则有有限提升；**单纯 slice 平衡或 margin、当前 Adapter 设计** 未达预期；**Attention** 在本实验中贡献有限。
+瓶颈在 **Class-IL**：测试时无任务 ID，各 slice 竞争失衡。无真实回放下，**Exp9 VAE 伪样本** 与 **Exp19 原型增强+SI** 最佳；**SI（Exp7）**、**Exp15 PRL** 次之；**Exp14 原型增强**、**Exp17 LDC** 有有限提升；**Exp16 PASS SSL** 持平 Baseline；**Exp18 非对称 CE**、**Adapter / Task inference（Exp10/13）** 未达预期或更差；**Attention** 在本实验中贡献有限。
 
 ---
 
@@ -123,7 +139,13 @@
 | **Exp10** Adapters | 99.4% | 20.51% | -98.61% | 比 Baseline 更差 |
 | **Exp11** Slice 平衡 | 99.1% | 25.72% | -90.56% | 与 Baseline 接近 |
 | **Exp12** Slice margin | 99.3% | 26.31% | -91.30% | 与 Baseline/Exp11 接近 |
-| Exp13 | — | — | — | 待跑 |
+| **Exp13** Task inference | 77.4% | 19.81% | -97.90% | task head 偏向新任务，路由失效；劣于 Baseline |
+| **Exp14** 原型增强 | 99.4% | 27.69% | -89.52% | 特征空间原型增强（PASS 风） |
+| **Exp15** PRL 预留空间 | 99.4% | 29.00% | -88.00% | Base 预留空间 + 新任务推入预留区 |
+| **Exp16** PASS SSL | 98.5% | 25.90% | -91.12% | 原型增强 + 自监督，与 Baseline 接近 |
+| **Exp17** LDC 漂移补偿 | 99.4% | 26.89% | -90.61% | 可学习 projector 补偿特征漂移 |
+| **Exp18** 非对称 CE | 99.3% | 23.33% | -95.23% | 非对称 CE 在本设定下更差 |
+| **Exp19** 原型增强+SI | 99.3% | **39.52%** | **-73.34%** | **与 Exp9 同档，轻量无 VAE** |
 
 ---
 
@@ -159,6 +181,13 @@
 
 | 时间 | 脚本 | 实验名 | Final Avg Class-IL | BWT | Forgetting | 结果目录 / Log |
 | --- | --- | --- | --- | --- | --- | --- |
+| 2026-02-11 | split_mnist\exp19_proto_aug_si.py | exp19_proto_aug_si | 39.52% | -73.34% | T0=82.6%, T1=91.5%, T2=62.6%, T3=56.6%, T4=0.0% | [结果目录](output\split_mnist\experiments\2026-02-11_21-45-37_exp19_proto_aug_si) · [train.log](output\split_mnist\experiments\2026-02-11_21-45-37_exp19_proto_aug_si/train.log) |
+| 2026-02-11 | split_mnist\exp18_asymmetric_ce.py | exp18_asymmetric_ce | 23.33% | -95.23% | T0=99.9%, T1=98.9%, T2=97.5%, T3=84.6%, T4=0.0% | [结果目录](output\split_mnist\experiments\2026-02-11_21-27-34_exp18_asymmetric_ce) · [train.log](output\split_mnist\experiments\2026-02-11_21-27-34_exp18_asymmetric_ce/train.log) |
+| 2026-02-11 | split_mnist\exp17_ldc_drift.py | exp17_ldc_drift | 26.89% | -90.61% | T0=100.0%, T1=99.2%, T2=94.2%, T3=69.1%, T4=0.0% | [结果目录](output\split_mnist\experiments\2026-02-11_21-09-31_exp17_ldc_drift) · [train.log](output\split_mnist\experiments\2026-02-11_21-09-31_exp17_ldc_drift/train.log) |
+| 2026-02-11 | split_mnist\exp16_pass_ssl.py | exp16_pass_ssl | 25.90% | -91.12% | T0=99.9%, T1=98.1%, T2=98.7%, T3=67.7%, T4=0.0% | [结果目录](output\split_mnist\experiments\2026-02-11_20-51-25_exp16_pass_ssl) · [train.log](output\split_mnist\experiments\2026-02-11_20-51-25_exp16_pass_ssl/train.log) |
+| 2026-02-11 | split_mnist\exp15_prl_base_reserve.py | exp15_prl_base_reserve | 29.00% | -88.00% | T0=100.0%, T1=99.1%, T2=92.7%, T3=60.2%, T4=0.0% | [结果目录](output\split_mnist\experiments\2026-02-11_20-33-22_exp15_prl_base_reserve) · [train.log](output\split_mnist\experiments\2026-02-11_20-33-22_exp15_prl_base_reserve/train.log) |
+| 2026-02-11 | split_mnist\exp14_proto_aug.py | exp14_proto_aug | 27.69% | -89.52% | T0=99.9%, T1=98.9%, T2=93.3%, T3=66.0%, T4=0.0% | [结果目录](output\split_mnist\experiments\2026-02-11_20-14-56_exp14_proto_aug) · [train.log](output\split_mnist\experiments\2026-02-11_20-14-56_exp14_proto_aug/train.log) |
+| 2026-02-11 | split_mnist\exp13_task_inference.py | exp13_task_inference | 19.81% | -97.90% | T0=100.0%, T1=92.3%, T2=99.7%, T3=99.7%, T4=0.0% | [结果目录](output\split_mnist\experiments\2026-02-11_19-25-19_exp13_task_inference) · [train.log](output\split_mnist\experiments\2026-02-11_19-25-19_exp13_task_inference/train.log) |
 | 2026-02-11 | split_mnist\exp12_slice_margin.py | exp12_slice_margin | 26.31% | -91.30% | T0=99.9%, T1=99.0%, T2=95.6%, T3=70.7%, T4=0.0% | [结果目录](output\split_mnist\experiments\2026-02-11_19-06-57_exp12_slice_margin) · [train.log](output\split_mnist\experiments\2026-02-11_19-06-57_exp12_slice_margin/train.log) |
 | 2026-02-11 | split_mnist\exp11_slice_balance.py | exp11_slice_balance | 25.72% | -90.56% | T0=99.3%, T1=92.6%, T2=90.6%, T3=79.8%, T4=0.0% | [结果目录](output\split_mnist\experiments\2026-02-11_18-48-59_exp11_slice_balance) · [train.log](output\split_mnist\experiments\2026-02-11_18-48-59_exp11_slice_balance/train.log) |
 | 2026-02-11 | split_mnist\exp10_adapters.py | exp10_adapters | 20.51% | -98.61% | T0=100.0%, T1=98.6%, T2=99.8%, T3=96.1%, T4=0.0% | [结果目录](output\split_mnist\experiments\2026-02-11_18-30-47_exp10_adapters) · [train.log](output\split_mnist\experiments\2026-02-11_18-30-47_exp10_adapters/train.log) |
