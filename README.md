@@ -44,6 +44,7 @@
 | **Exp7 SI** | Synaptic Intelligence λ_si=1，λ_slice=2, λ_feat=0.5 | **99.2%** | **34.15%** | -80.88% | 较轻 | `output/.../2026-02-11_17-33-31_exp7_si` |
 | **Exp8 Attention + SI** | Attention backbone + SI | **99.1%** | 29.64% | -84.61% | 严重 | `output/.../2026-02-11_17-51-42_exp8_attention_plus_si` |
 | **Exp9 VAE 伪样本** | 每任务 CVAE 生成伪样本参与 CE，无真实回放 | **97.1%** | **40.35%** | -71.37% | 较轻（T0~T3 约 63%～81%） | `output/.../2026-02-11_18-10-46_exp9_vae_pseudo_replay` |
+| **Exp12 Slice margin** | λ_slice_margin=1, margin=0.5，正确 slice max > 其它 + margin | **99.3%** | **26.31%** | -91.30% | 严重（T0≈99.9%, T1≈99.0%, T2≈95.6%, T3≈70.7%, T4=0%） | `output/.../2026-02-11_19-06-57_exp12_slice_margin` |
 
 ### 3. 已跑完、仅有 train.log 的实验
 
@@ -54,63 +55,55 @@
 ### 4. 方法小结：什么有用、什么没用
 
 **Task-IL（已知任务 ID）**  
-在“给出任务”的设定下，蒸馏 + 共享 head 已经足够：Baseline / Exp2 / Exp4 / Exp6～Exp9 的 Task-IL 多在 **97%～99%**。说明各任务的 logit slice 在已知任务时都能被正确选用，瓶颈不在 Task-IL。
+在“给出任务”的设定下，蒸馏 + 共享 head 已经足够：Baseline / Exp2 / Exp4 / Exp6～Exp12 的 Task-IL 多在 **97%～99%**。各任务的 logit slice 在已知任务时都能被正确选用，**瓶颈不在 Task-IL**。
 
-**Class-IL（不知任务 ID）——有效方法（按效果排序）**
+**Class-IL（不知任务 ID）——按效果排序**
 
-1. **生成式伪样本（Exp9）**：每任务 CVAE 生成旧类参与 CE，**不存真实样本**。Class-IL **40.35%**，BWT **-71.37%**，均为当前最佳；遗忘明显轻于纯蒸馏/正则。
-2. **Synaptic Intelligence（Exp7）**：突触重要性正则。Class-IL **34.15%**，BWT -80.88%，仅次于 Exp9。
-3. **更强蒸馏正则（Exp2）**：λ_slice=8, λ_feat=2。Class-IL **29.37%**，略好于 Baseline。
-4. **EWC（Exp4）**：与 Exp2 同量级，Class-IL **29.02%**，BWT -87.92%。
-5. **Attention + SI（Exp8）**：Class-IL **29.64%**，与 Exp2/Exp4 接近。
-6. **Attention Backbone（Exp6）**：Class-IL **26.27%**，略优于 Baseline，弱于 Exp2/Exp4/Exp7/Exp9。
-7. **Baseline**：Class-IL **25.69%**，BWT -92.21%。
-8. **Slice 平衡（Exp11）**：Class-IL **25.72%**，与 Baseline 几乎相同；BWT -90.56%，略有改善但不明显。
-9. **Adapters（Exp10）**：Class-IL **20.51%**，BWT **-98.61%**，**比 Baseline 更差**；Task-IL 仍 99%+，但 Class-IL 旧任务几乎全忘。
+| 梯队 | 实验 | Class-IL | BWT | 说明 |
+|------|------|----------|-----|------|
+| 最佳 | **Exp9 VAE 伪样本** | **40.35%** | -71.37% | 每任务 CVAE 生成旧类参与 CE，不存真实样本；遗忘最轻。 |
+| 次佳 | **Exp7 SI** | **34.15%** | -80.88% | 突触重要性正则，与 EWC 互补。 |
+| 有效 | Exp2 更强正则、Exp4 EWC、Exp8 Attention+SI | 29%～29.6% | -85%～-88% | 蒸馏/正则有有限提升。 |
+| 略优 | Exp6 Attention、Exp12 Slice margin | 26.27%、26.31% | -90%～-91% | 略优于 Baseline，单点改进收益有限。 |
+| 持平 | Baseline、Exp11 Slice 平衡 | 25.69%、25.72% | -90%～-92% | 基准与“平衡方差”几乎无增益。 |
+| 更差 | **Exp10 Adapters** | **20.51%** | **-98.61%** | 每任务 adapter + mean 融合，反而加重 slice 竞争。 |
+| 崩塌 | Exp3 冻结、Exp5 冻结+强正则 | ～0% / 16.65% | — | 冻结 backbone 在无任务 ID 下无法保持旧类。 |
 
-**Class-IL——无效或有害**
+**单点结论**
 
-- **冻结 Backbone（Exp3）**：Class-IL 旧任务几乎归零，仅当前任务高；说明冻结后“无任务 ID”时无法选对 slice。
-- **冻结 + 更强正则（Exp5）**：Task-IL 82.5%，Class-IL **16.65%** 最低；过度限制 backbone 损害多任务表征。
-- **Adapters（Exp10）**：每任务一个 bottleneck adapter、共享 backbone，Class-IL **20.51%**、BWT -98.61%，**劣于 Baseline**；在现有设定下“任务专用 adapter + mean 融合”反而加重 slice 竞争、旧任务被压得更狠。
+- **Exp10 Adapters**：每任务 adapter、推理时 mean 融合 → Class-IL 劣于 Baseline，当前设定下“任务专用 adapter”未缓解 slice 竞争。
+- **Exp11 Slice 平衡**：约束各 slice 强度方差（λ=0.5）→ 与 Baseline 同量级，单纯平衡方差收益有限。
+- **Exp12 Slice margin**：正确 slice max > 其它 + margin（λ=1, margin=0.5）→ 与 Baseline/Exp11 同量级，单纯拉大 margin 收益有限。
+- **Attention（Exp6/Exp8）**：在本设定下对 Class-IL 贡献不明显，Exp8 甚至弱于单用 SI；可能与任务数少、数据简单有关。
 
-**Exp10（Adapters）/ Exp11（Slice 平衡）小结**
-
-- **Exp10 Adapters**：共享 MLP backbone，每任务一个 400→64→400 的 adapter，推理时对已见任务的 adapter 输出做 mean 再进 cosine head。Task-IL 仍 **99.4%**，但 Class-IL **20.51%**、BWT **-98.61%**，均差于 Baseline（25.69%、-92.21%），旧任务在 Class-IL 下几乎全忘。结论：当前“每任务 adapter + mean 融合”没有缓解 slice 竞争，反而让不同任务的 logit 更易失衡。
-- **Exp11 Slice 平衡**：在蒸馏基础上加“各任务 slice 强度方差”损失（λ=0.5），约束各 slice 的 mean max logit 尽量接近。Class-IL **25.72%**、BWT -90.56%，与 Baseline（25.69%、-92.21%）几乎同一量级，**没有明显提升**。结论：单纯约束 slice 强度方差在本设定下收益有限，可能需要更强权重或配合 margin/路由等。
-
-**Attention 在本实验中的实际作用**  
-当前用的 Attention 是「patch + 1 层 multi-head self-attention」替代 MLP backbone 的前两层，理论上能加强表征和任务区分。但从结果看：  
-- **Exp6（仅 Attention）**：Class-IL 26.27% vs Baseline 25.69%，只高约 **0.6%**；BWT 略好（-90.57% vs -92.21%），提升有限。  
-- **Exp8（Attention + SI）**：Class-IL **29.64%**，反而比 **Exp7（仅 SI）34.15%** 低约 4.5 个百分点。  
-
-结论：在现有设定下，**Attention backbone 对 Class-IL 几乎没有带来可辨收益**，和 SI 一起用时还略差于单用 SI。可能原因：任务数少、数据简单（MNIST），Attention 的全局建模优势没发挥；或参数量/容量增加加剧了对旧任务的遗忘；当前 patch/层数/头数也未针对 Class-IL 调优。若继续用 Attention，可尝试更轻量、或与 slice 平衡/任务路由等显式约束结合。
+**与文献对照**（详见 `doc/SOTA.md`）  
+无回放 Class-IL 在文献中（CIFAR-100 / ImageNet 等）典型在 **20%～40%** 区间，强方法（AdaGauss、DS-AL、VAE/伪样本等）可达 60%+ 或与回放可比。本仓库 **Exp9（40.35%）** 落在该区间上界附近，与“生成式伪样本 / 原型增强”类思路（如 PASS、AdaGauss 的类高斯建模）一致；**SI/蒸馏** 与顶会中正则/重要性加权思路一致，但单靠 slice 平衡/margin（Exp11/12）尚未带来可辨提升。
 
 **核心结论**  
-Task-IL 已接近满分，**瓶颈在 Class-IL**：测试时没有任务 ID，各 slice 竞争失衡，新任务易压制旧任务。在无真实回放前提下，**生成式伪样本（Exp9）** 最能缓解这一问题；**SI（Exp7）** 次之；仅靠蒸馏/正则（Exp2/Exp4）有有限提升；**Attention（Exp6/Exp8）在本实验中贡献不明显**。
+瓶颈在 **Class-IL**：测试时无任务 ID，各 slice 竞争失衡。无真实回放下，**生成式伪样本（Exp9）** 最有效，**SI（Exp7）** 次之；蒸馏/正则有有限提升；**单纯 slice 平衡或 margin、当前 Adapter 设计** 未达预期；**Attention** 在本实验中贡献有限。
 
-### 5. 如何把 Task-IL 同步到 Class-IL
+---
 
-Task-IL 高、Class-IL 低，本质是**测试时没有任务 ID**，模型必须在 10 类上直接做决策，而各任务的 logit slice 之间存在**竞争与失衡**（新任务 slice 压制旧任务）。因此“把 Task-IL 同步到 Class-IL”等价于：**在无任务 ID 的前提下，仍能选对“该用哪个任务的 slice”**。可尝试方向：
+### 5. 基于顶会论文的新点子（可做后续实验）
 
-1. **Slice 平衡与校准**：约束各任务 slice 的 scale/范数，避免后学任务 logits 系统性大于先学任务（当前 group-diff 日志已在观察 slice strength / gap）。
-2. **任务不可知的路由**：用轻量模块根据输入预测“更可能属于哪一任务”，再加权或选择对应 slice，而不是直接对所有 slice 做 argmax（类似 task inference / Pseudo-task 思路）。
-3. **统一表征 + 类边界**：减少“每任务一块 slice”的割裂，让 backbone 输出更任务无关的特征，在 10 类空间上直接学边界（难度大，易遗忘）。
-4. **生成式/伪样本**（Exp9）：无真实回放前提下用 VAE 等生成旧类样本，让分类器在 10 类上持续看到旧类，有助于 Class-IL 边界不塌。
-5. **Attention / Adapter**（Exp6 / Exp8 / Exp10）：通过更强表征或任务专用 adapter，让“同一 backbone 下不同任务”的 logits 更可区分、更平衡，从而在 Class-IL 下更稳。
+下面结合 `doc/SOTA.md` 中的 **NeurIPS / ICLR / CVPR / ECCV / AAAI** 无回放 Class-IL 工作，提炼可落地的方向，供后续实验参考。
 
-后续实验可围绕：**slice 平衡正则、任务推理模块、以及 Exp6–10 的 Class-IL 结果**，系统对比哪条路最能将 Task-IL 的优势迁移到 Class-IL。
+| 顶会思路 | 可做的新实验 | 与本仓库的衔接 |
+|----------|----------------|----------------|
+| **PASS (CVPR’21)**：原型增强 + 自监督 | **特征空间原型增强**：只存每类均值特征（或 slice 原型），对新任务训练时对旧类原型加高斯噪声生成“伪旧特征”，参与蒸馏或 CE。比 Exp9 的 VAE 更轻、无需生成图像。 | 已有 slice/group 统计；可加 `proto_aug` 噪声采样与损失。 |
+| **AdaGauss (NeurIPS’24)**：类为高斯、自适应协方差 + anti-collapse | **Slice 高斯化 + anti-collapse**：把每个任务的 slice 视为高斯（均值 + 对角/低秩协方差），增量时更新协方差；加 anti-collapse 损失（如约束特征维度不塌缩）。 | 已有 cosine head 与 slice；可改为 NCM/高斯分类器 + 协方差更新与正则。 |
+| **DS-AL / G-ACIL (AAAI/NeurIPS’24)**：解析闭式解、双流补偿 | **解析头 + 补偿分支**：旧类用递归最小二乘/闭式线性分类器（不梯度更新），新类用现有 head；或加一个小型“补偿 MLP”把特征映射到与旧类兼容的空间。 | 可先做“旧类 NCM、新类 CE”的混合头，或 tiny 补偿网络。 |
+| **PRL (NeurIPS’24)**：前瞻表示、为未来类预留空间 | **Base 阶段预留空间**：Task 0 训练时加正则，让特征分布“收紧”或留出空白区域；新任务时约束新类特征落入预留区，减少对旧类区域的侵占。 | 可在 Task 0 加 spread/radius 约束，新任务加“推入预留区”的损失。 |
+| **LDC (ECCV’24)**：可学习漂移补偿 | **漂移补偿模块**：backbone 每任务更新后，旧类原型在“新特征空间”里会漂移；学一个小型 projector（如 1 层 MLP）把当前特征映射到“旧空间”，使旧类原型仍有效。 | 每任务存旧类原型；新任务时加 projector，旧类用投影后特征与旧原型匹配。 |
+| **TASS (CVPR’24)**：任务自适应显著性 | **显著性/注意力一致性**：对旧类样本（或伪样本）约束其 attention map / 梯度显著性 与 该任务学习时保存的模板 一致，减缓显著性漂移。 | 已有 Attention backbone（Exp6/8）；可存每任务平均 attention，加一致性损失。 |
+| **EFC (ICLR’24)**：EFM + 高斯原型 + 非对称 CE | **经验特征矩阵 + 非对称 CE**：用旧类特征的二阶统计（或低秩近似）正则当前 backbone 的更新方向；对“旧类 vs 新类”使用非对称交叉熵，减轻新类主导。 | 可维护旧类特征的协方差或 EFM，加正则项；CE 对旧类降权或非对称。 |
+| **ACMap / CL-LoRA (CVPR’25)**：适配器合并 + 质心原型；双适配器 | **共享 adapter + 合并**：不做“每任务一 adapter + mean”，改为 **一个共享 adapter** + 每任务只训 head；或每任务 adapter 在学完后**合并**到共享 adapter（ACMap 式），保持单模型推理。 | Exp10 的“每任务 adapter”失败；可试 shared adapter + task-specific head only，或 adapter merging。 |
 
-### 6. 新增实验方向（冲击 Class-IL SOTA，无回放）
+**优先可试的三条**
 
-在现有正则/EWC/冻结基础上，新增以下方向，均**不使用真实样本回放**：
-
-- **Attention**：Exp6 / Exp8 使用 patch + multi-head self-attention 的 backbone，提升表征与任务区分。
-- **Synaptic Intelligence (SI)**：Exp7 / Exp8 使用突触重要性正则，与 EWC 互补。
-- **迁移/适配器**：Exp10 每任务一个 bottleneck adapter，共享 backbone，迁移学习风格。
-- **生成式伪样本**：Exp9 每任务训练 CVAE，新任务时从旧任务 VAE 采样参与 CE 损失，**不存储任何真实样本**（可视为无回放或“伪回放”）。
-
-扩散模型方向可在后续用轻量扩散替代 VAE 做生成式正则或伪样本。
+1. **特征空间原型增强（PASS 风）**：只存每类均值特征，加噪声生成伪旧特征做蒸馏/CE，实现成本低、与 Exp9 对比清晰。  
+2. **漂移补偿（LDC 风）**：固定旧类原型，新任务时学一个小 projector 把当前特征映射到“旧空间”，减轻 backbone 更新对旧类的影响。  
+3. **解析头 / 旧类 NCM（DS-AL 风）**：旧类用最近类均值或闭式解，新类用 CE；减少对旧类参数的梯度更新，降低遗忘。
 
 ---
 
@@ -129,7 +122,8 @@ Task-IL 高、Class-IL 低，本质是**测试时没有任务 ID**，模型必�
 | **Exp9** VAE 伪样本 | 97.1% | **40.35%** | -71.37% | **当前 Class-IL 最佳** |
 | **Exp10** Adapters | 99.4% | 20.51% | -98.61% | 比 Baseline 更差 |
 | **Exp11** Slice 平衡 | 99.1% | 25.72% | -90.56% | 与 Baseline 接近 |
-| Exp12～Exp13 | — | — | — | 待跑 |
+| **Exp12** Slice margin | 99.3% | 26.31% | -91.30% | 与 Baseline/Exp11 接近 |
+| Exp13 | — | — | — | 待跑 |
 
 ---
 
