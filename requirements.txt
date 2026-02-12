@@ -1,0 +1,8 @@
+# IdeasLab Split MNIST 实验依赖
+# Windows 上若遇 PyTorch c10.dll 加载失败 (WinError 1114)，请用 CPU 版 2.4.1。
+# 安装（需指定 PyTorch 源）:
+#   pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cpu
+
+torch==2.4.1+cpu
+torchvision==0.19.1+cpu
+numpy

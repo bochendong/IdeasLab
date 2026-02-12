@@ -1,0 +1,43 @@
+# ----- 大文件 / 不要提交 -----
+# 虚拟环境（体积很大）
+.venv/
+venv/
+env/
+
+# 数据集原始文件（可运行时代码自动下载）
+data/
+*.gz
+
+# 实验输出（日志、指标、模型权重，体积随实验增多变大）
+output/
+*.log
+*.pt
+*.pth
+*.ckpt
+
+# ----- Python -----
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+.eggs/
+
+# ----- Jupyter -----
+.ipynb_checkpoints/
+
+# ----- IDE / 系统 -----
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ----- 本地脚本（若不想提交） -----
+# run_*.ps1
