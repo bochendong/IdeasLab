@@ -32,6 +32,13 @@ EXPERIMENTS = [
     ("split_mnist/exp17_ldc_drift.py", "exp17_ldc_drift"),
     ("split_mnist/exp18_asymmetric_ce.py", "exp18_asymmetric_ce"),
     ("split_mnist/exp19_proto_aug_si.py", "exp19_proto_aug_si"),
+    # Exp20-25: 新方向实验
+    ("split_mnist/exp20_reverse_distill.py", "exp20_reverse_distill"),
+    ("split_mnist/exp21_dream_replay.py", "exp21_dream_replay"),
+    ("split_mnist/exp22_slice_gauss_anticollapse.py", "exp22_slice_gauss_anticollapse"),
+    ("split_mnist/exp23_adversarial_antiforget.py", "exp23_adversarial_antiforget"),
+    ("split_mnist/exp24_slice_lora.py", "exp24_slice_lora"),
+    ("split_mnist/exp25_slice_gauss_anticollapse_si.py", "exp25_slice_gauss_anticollapse_si"),
 ]
 
 EXPERIMENTS_ROOT = os.path.join(get_output_dir("split_mnist"), "experiments")
