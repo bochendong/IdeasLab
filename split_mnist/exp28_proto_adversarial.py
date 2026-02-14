@@ -1,5 +1,5 @@
-# ===== Exp21: 梦境回放 (Dream Replay) =====
-"""周期性"做梦"：每 N 步从旧任务 VAE 采样伪样本做一批纯梦境训练，与正常 batch 交替。"""
+# ===== Exp28: 原型 + 对抗（无 VAE）=====
+"""只存特征原型；判别器区分当前 batch 特征 vs 原型+噪声伪旧特征；projector G 将伪旧特征映射为骗过 D，并对 G(伪旧) 做 head CE。"""
 import os
 import sys
 import copy
@@ -31,20 +31,48 @@ from split_mnist.base_experiment import (
     DEFAULT_CONFIG, DEVICE, DATA_DIR, set_seed, setup_logging, CosineMLP, freeze_model,
     reg_loss_slice, log_group_differences,
 )
-from split_mnist.exp9_vae_pseudo_replay import CVAE, train_cvae, sample_from_vaes
+from split_mnist.exp19_proto_aug_si import compute_prototypes, sample_augmented_prototypes
 
 
-def run_experiment_dream_replay(
-    run_name: str = "exp21_dream_replay",
+class Discriminator(nn.Module):
+    """判别器：feat -> 0=旧类, 1=新类。"""
+    def __init__(self, feat_dim=400, hidden=128):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(feat_dim, hidden),
+            nn.ReLU(inplace=True),
+            nn.Linear(hidden, hidden),
+            nn.ReLU(inplace=True),
+            nn.Linear(hidden, 1),
+        )
+
+    def forward(self, feat):
+        return self.net(feat).squeeze(-1)
+
+
+class ProjectorG(nn.Module):
+    """将伪旧特征映射到「骗过 D」的空间，保持可分类。"""
+    def __init__(self, feat_dim=400, hidden=256):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(feat_dim, hidden),
+            nn.ReLU(inplace=True),
+            nn.Linear(hidden, feat_dim),
+        )
+
+    def forward(self, feat):
+        return self.net(feat)
+
+
+def run_experiment_proto_adversarial(
+    run_name: str = "exp28_proto_adversarial",
     config: dict = None,
     save_model_checkpoint: bool = False,
     script_file: str = None,
-    vae_epochs: int = 5,
-    dream_interval: int = 5,
-    dream_batch_ratio: float = 0.5,
-    vae_n_fake_per_task: int = 32,
+    proto_aug_r: float = 0.4,
+    proto_aug_n_per_class: int = 8,
+    lambda_adv: float = 0.1,
 ):
-    """梦境回放：每 dream_interval 步做一次纯梦境 batch；每个 batch 中 dream_batch_ratio 为梦境样本。"""
     cfg = {**DEFAULT_CONFIG, **(config or {})}
     set_seed(cfg["seed"])
     task_loaders = build_all_task_loaders(DATA_DIR, cfg["batch_size"])
@@ -58,10 +86,9 @@ def run_experiment_dream_replay(
         "batch_size": cfg["batch_size"],
         "lambda_slice": lambda_slice,
         "lambda_feat": lambda_feat,
-        "vae_epochs": vae_epochs,
-        "dream_interval": dream_interval,
-        "dream_batch_ratio": dream_batch_ratio,
-        "vae_n_fake_per_task": vae_n_fake_per_task,
+        "proto_aug_r": proto_aug_r,
+        "proto_aug_n_per_class": proto_aug_n_per_class,
+        "lambda_adv": lambda_adv,
     }
 
     script_file = script_file or os.path.abspath(__file__)
@@ -74,18 +101,18 @@ def run_experiment_dream_replay(
         logging.info(f"Config: {exp_config}")
 
         model = CosineMLP().to(DEVICE)
+        discriminator = Discriminator(feat_dim=400).to(DEVICE)
+        projector_g = ProjectorG(feat_dim=400).to(DEVICE)
         prev_models = []
-        vaes = []
+        all_protos = {}
         task_il_matrix = []
         class_il_matrix = []
 
         for task in range(5):
             logging.info(f"========== Task {task}: classes {TASK_DIR[task]} ==========")
-            vae = CVAE(in_dim=784, num_classes=2, latent_dim=32, hidden=256).to(DEVICE)
-            vae = train_cvae(vae, task_loaders[task][0], DEVICE, epochs=vae_epochs)
-            vaes.append(copy.deepcopy(vae))
-
             optimizer = torch.optim.Adam(model.parameters(), lr=cfg["lr"])
+            opt_d = torch.optim.Adam(discriminator.parameters(), lr=cfg["lr"] * 0.5)
+            opt_g = torch.optim.Adam(projector_g.parameters(), lr=cfg["lr"])
             criterion = nn.CrossEntropyLoss()
             valid_out_dim = 2 * (task + 1)
             step = 0
@@ -94,19 +121,42 @@ def run_experiment_dream_replay(
                 for x, y in task_loaders[task][0]:
                     x, y = x.to(DEVICE), y.to(DEVICE)
                     model.train()
+                    discriminator.train()
+                    projector_g.train()
 
                     logits, feat = model(x)
                     c_loss = criterion(logits[:, :valid_out_dim], y)
                     r_loss = reg_loss_slice(logits, feat, x, prev_models, task, lambda_slice, lambda_feat, device=DEVICE)
                     loss = c_loss + r_loss
 
-                    if task > 0 and vaes and step % dream_interval == 0:
-                        n_fake = min(int(x.size(0) * dream_batch_ratio) or 32, 128)
-                        x_fake, y_fake = sample_from_vaes(vaes[:-1], list(range(task)), max(1, n_fake // task), DEVICE)
-                        x_fake = x_fake.view(-1, 1, 28, 28)
-                        if x_fake.size(0) > 0:
-                            logits_fake, _ = model(x_fake)
-                            loss = loss + 0.5 * criterion(logits_fake[:, :valid_out_dim], y_fake)
+                    feat_new = feat.detach()
+                    if task > 0 and all_protos:
+                        old_protos = {c: p for c, p in all_protos.items() if c not in TASK_DIR[task]}
+                        if old_protos:
+                            feat_aug, label_aug = sample_augmented_prototypes(old_protos, proto_aug_n_per_class, proto_aug_r, DEVICE)
+                            if feat_aug is not None:
+                                feat_aug = feat_aug.to(DEVICE)
+                                feat_old_proj = projector_g(feat_aug)
+
+                                d_out_new = discriminator(feat_new)
+                                d_out_old = discriminator(feat_old_proj.detach())
+                                loss_d = F.binary_cross_entropy_with_logits(d_out_new, torch.ones_like(d_out_new)) + \
+                                         F.binary_cross_entropy_with_logits(d_out_old, torch.zeros_like(d_out_old))
+                                opt_d.zero_grad()
+                                loss_d.backward()
+                                opt_d.step()
+
+                                d_out_old_for_g = discriminator(feat_old_proj)
+                                loss_adv_g = F.binary_cross_entropy_with_logits(d_out_old_for_g, torch.ones_like(d_out_old_for_g))
+                                feat_old_n = F.normalize(feat_old_proj, dim=1)
+                                W_n = F.normalize(model.W.data[:valid_out_dim].t(), dim=1)
+                                logits_aug = model.logit_scale * (feat_old_n @ W_n)
+                                loss_ce_old = criterion(logits_aug, label_aug)
+                                loss_g = lambda_adv * loss_adv_g + 0.5 * loss_ce_old
+                                opt_g.zero_grad()
+                                loss_g.backward()
+                                opt_g.step()
+                                # 不在主 loss 中再次加入 loss_ce_old，避免对同一计算图 backward 两次
 
                     optimizer.zero_grad()
                     loss.backward()
@@ -119,6 +169,10 @@ def run_experiment_dream_replay(
                             msg.append(f"CI_T{t}={acc_ci*100:.2f}%")
                         logging.info(" | ".join(msg))
                     step += 1
+
+            protos_t = compute_prototypes(model, task_loaders, task, DEVICE)
+            for c, p in protos_t.items():
+                all_protos[c] = p.detach().clone()
 
             prev_models.append(freeze_model(copy.deepcopy(model).to(DEVICE)))
 
@@ -156,12 +210,11 @@ def run_experiment_dream_replay(
 
 
 if __name__ == "__main__":
-    run_experiment_dream_replay(
-        run_name="exp21_dream_replay",
+    run_experiment_proto_adversarial(
+        run_name="exp28_proto_adversarial",
         config={"lambda_slice": 2.0, "lambda_feat": 0.5},
         script_file=os.path.abspath(__file__),
-        vae_epochs=5,
-        dream_interval=5,
-        dream_batch_ratio=0.5,
-        vae_n_fake_per_task=32,
+        proto_aug_r=0.4,
+        proto_aug_n_per_class=8,
+        lambda_adv=0.1,
     )

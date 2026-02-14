@@ -39,6 +39,34 @@ EXPERIMENTS = [
     ("split_mnist/exp23_adversarial_antiforget.py", "exp23_adversarial_antiforget"),
     ("split_mnist/exp24_slice_lora.py", "exp24_slice_lora"),
     ("split_mnist/exp25_slice_gauss_anticollapse_si.py", "exp25_slice_gauss_anticollapse_si"),
+    # Exp26–32: 伪回放+稳固组合与变体
+    ("split_mnist/exp26_adversarial_antiforget_si.py", "exp26_adversarial_antiforget_si"),
+    ("split_mnist/exp27_vae_pseudo_replay_si.py", "exp27_vae_pseudo_replay_si"),
+    ("split_mnist/exp28_proto_adversarial.py", "exp28_proto_adversarial"),
+    ("split_mnist/exp29_reverse_distill_si.py", "exp29_reverse_distill_si"),
+    ("split_mnist/exp30_slice_gauss_anticollapse_si_proto.py", "exp30_slice_gauss_anticollapse_si_proto"),
+    ("split_mnist/exp31_slice_space_adversarial.py", "exp31_slice_space_adversarial"),
+    ("split_mnist/exp32_dual_discriminator.py", "exp32_dual_discriminator"),
+    # Exp33–42: 冲 50%+ 与 doc 借鉴
+    ("split_mnist/exp33_dual_discriminator_si.py", "exp33_dual_discriminator_si"),
+    ("split_mnist/exp34_dual_discriminator_stronger_replay.py", "exp34_dual_discriminator_stronger_replay"),
+    ("split_mnist/exp35_dual_discriminator_slice_margin.py", "exp35_dual_discriminator_slice_margin"),
+    ("split_mnist/exp36_dual_discriminator_proto.py", "exp36_dual_discriminator_proto"),
+    ("split_mnist/exp37_dual_discriminator_balanced_batch.py", "exp37_dual_discriminator_balanced_batch"),
+    ("split_mnist/exp38_dual_discriminator_slice_var.py", "exp38_dual_discriminator_slice_var"),
+    ("split_mnist/exp39_dual_discriminator_anticollapse.py", "exp39_dual_discriminator_anticollapse"),
+    ("split_mnist/exp40_dual_discriminator_efm.py", "exp40_dual_discriminator_efm"),
+    ("split_mnist/exp41_dual_discriminator_ortho.py", "exp41_dual_discriminator_ortho"),
+    ("split_mnist/exp42_dual_discriminator_slice_consist.py", "exp42_dual_discriminator_slice_consist"),
+    # Exp43–44: 冲 52%+ 组合（Exp35+Exp34 / Exp35+Exp39）
+    ("split_mnist/exp43_dual_discriminator_slice_margin_stronger_replay.py", "exp43_dual_discriminator_slice_margin_stronger_replay"),
+    ("split_mnist/exp44_dual_discriminator_slice_margin_anticollapse.py", "exp44_dual_discriminator_slice_margin_anticollapse"),
+    # Exp45–49: 机器学习方法结合（Focal / 蒸馏 / Mixup / 对比 / 重要性加权）
+    ("split_mnist/exp45_slice_margin_focal.py", "exp45_slice_margin_focal"),
+    ("split_mnist/exp46_slice_margin_distill.py", "exp46_slice_margin_distill"),
+    ("split_mnist/exp47_slice_margin_mixup.py", "exp47_slice_margin_mixup"),
+    ("split_mnist/exp48_slice_margin_contrastive.py", "exp48_slice_margin_contrastive"),
+    ("split_mnist/exp49_slice_margin_importance.py", "exp49_slice_margin_importance"),
 ]
 
 EXPERIMENTS_ROOT = os.path.join(get_output_dir("split_mnist"), "experiments")

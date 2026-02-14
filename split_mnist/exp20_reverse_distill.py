@@ -39,7 +39,7 @@ def reverse_distill_loss(model, prev_models, vaes, valid_out_dim, n_fake_per_tas
     if not prev_models or not vaes:
         return torch.tensor(0.0, device=device)
     n_fake = min(n_fake_per_task * len(vaes), 128)
-    x_fake, y_fake = sample_from_vaes(vaes, list(range(len(vaes))), n_fake // len(vaes))
+    x_fake, y_fake = sample_from_vaes(vaes, list(range(len(vaes))), n_fake // len(vaes), device)
     x_fake = x_fake.view(-1, 1, 28, 28)
 
     student_logits, _ = model(x_fake)

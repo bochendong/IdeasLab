@@ -1,5 +1,5 @@
-# ===== Exp21: 梦境回放 (Dream Replay) =====
-"""周期性"做梦"：每 N 步从旧任务 VAE 采样伪样本做一批纯梦境训练，与正常 batch 交替。"""
+# ===== Exp27: Exp9 VAE 伪样本 + SI =====
+"""VAE 伪样本 CE 回放（同 Exp9）+ Synaptic Intelligence 参数正则。"""
 import os
 import sys
 import copy
@@ -29,22 +29,20 @@ from experiment_manager import ExperimentManager, get_output_dir
 from split_mnist.common import TASK_DIR, build_all_task_loaders, cal_acc_class_il, evaluate_after_task, compute_forgetting, compute_bwt
 from split_mnist.base_experiment import (
     DEFAULT_CONFIG, DEVICE, DATA_DIR, set_seed, setup_logging, CosineMLP, freeze_model,
-    reg_loss_slice, log_group_differences,
+    reg_loss_slice, log_group_differences, si_penalty, update_si_omega,
 )
 from split_mnist.exp9_vae_pseudo_replay import CVAE, train_cvae, sample_from_vaes
 
 
-def run_experiment_dream_replay(
-    run_name: str = "exp21_dream_replay",
+def run_experiment_vae_si(
+    run_name: str = "exp27_vae_pseudo_replay_si",
     config: dict = None,
     save_model_checkpoint: bool = False,
     script_file: str = None,
     vae_epochs: int = 5,
-    dream_interval: int = 5,
-    dream_batch_ratio: float = 0.5,
     vae_n_fake_per_task: int = 32,
+    si_lambda: float = 1.0,
 ):
-    """梦境回放：每 dream_interval 步做一次纯梦境 batch；每个 batch 中 dream_batch_ratio 为梦境样本。"""
     cfg = {**DEFAULT_CONFIG, **(config or {})}
     set_seed(cfg["seed"])
     task_loaders = build_all_task_loaders(DATA_DIR, cfg["batch_size"])
@@ -59,9 +57,8 @@ def run_experiment_dream_replay(
         "lambda_slice": lambda_slice,
         "lambda_feat": lambda_feat,
         "vae_epochs": vae_epochs,
-        "dream_interval": dream_interval,
-        "dream_batch_ratio": dream_batch_ratio,
         "vae_n_fake_per_task": vae_n_fake_per_task,
+        "si_lambda": si_lambda,
     }
 
     script_file = script_file or os.path.abspath(__file__)
@@ -76,6 +73,7 @@ def run_experiment_dream_replay(
         model = CosineMLP().to(DEVICE)
         prev_models = []
         vaes = []
+        si_omega_star_list = []
         task_il_matrix = []
         class_il_matrix = []
 
@@ -84,11 +82,20 @@ def run_experiment_dream_replay(
             vae = CVAE(in_dim=784, num_classes=2, latent_dim=32, hidden=256).to(DEVICE)
             vae = train_cvae(vae, task_loaders[task][0], DEVICE, epochs=vae_epochs)
             vaes.append(copy.deepcopy(vae))
+            vae = vaes[-1]
 
             optimizer = torch.optim.Adam(model.parameters(), lr=cfg["lr"])
             criterion = nn.CrossEntropyLoss()
             valid_out_dim = 2 * (task + 1)
             step = 0
+
+            si_omega = {}
+            si_theta_prev = {}
+            if si_lambda > 0:
+                for n, p in model.named_parameters():
+                    if p.requires_grad:
+                        si_omega[n] = torch.zeros_like(p.data, device=DEVICE)
+                        si_theta_prev[n] = p.data.clone()
 
             for ep in range(cfg["epochs_per_task"]):
                 for x, y in task_loaders[task][0]:
@@ -100,25 +107,39 @@ def run_experiment_dream_replay(
                     r_loss = reg_loss_slice(logits, feat, x, prev_models, task, lambda_slice, lambda_feat, device=DEVICE)
                     loss = c_loss + r_loss
 
-                    if task > 0 and vaes and step % dream_interval == 0:
-                        n_fake = min(int(x.size(0) * dream_batch_ratio) or 32, 128)
+                    if task > 0 and vaes:
+                        n_fake = min(vae_n_fake_per_task * task, 128)
                         x_fake, y_fake = sample_from_vaes(vaes[:-1], list(range(task)), max(1, n_fake // task), DEVICE)
                         x_fake = x_fake.view(-1, 1, 28, 28)
-                        if x_fake.size(0) > 0:
-                            logits_fake, _ = model(x_fake)
-                            loss = loss + 0.5 * criterion(logits_fake[:, :valid_out_dim], y_fake)
+                        logits_fake, _ = model(x_fake)
+                        loss_fake = criterion(logits_fake[:, :valid_out_dim], y_fake)
+                        loss = loss + 0.5 * loss_fake
+
+                    si_loss_val = torch.tensor(0.0, device=DEVICE)
+                    if si_lambda > 0 and si_omega_star_list:
+                        si_loss_val = si_lambda * si_penalty(model, si_omega_star_list, device=DEVICE)
+                        loss = loss + si_loss_val
 
                     optimizer.zero_grad()
                     loss.backward()
+                    if si_lambda > 0 and si_omega:
+                        update_si_omega(si_omega, si_theta_prev, model, device=DEVICE)
                     optimizer.step()
 
                     if step % 25 == 0:
-                        msg = [f"[Task {task} | ep {ep} | step {step}] loss={loss.item():.4f}"]
+                        msg = [f"[Task {task} | ep {ep} | step {step}] loss={loss.item():.4f} c={c_loss.item():.4f} r={r_loss.item():.4f}"]
+                        if si_loss_val.item() > 0:
+                            msg.append(f"si={si_loss_val.item():.4f}")
                         for t in range(task + 1):
                             acc_ci = cal_acc_class_il(model, task_loaders[t][0], valid_out_dim, device=DEVICE)
                             msg.append(f"CI_T{t}={acc_ci*100:.2f}%")
                         logging.info(" | ".join(msg))
                     step += 1
+
+            if si_lambda > 0 and si_omega:
+                omega_copy = {n: t.clone() for n, t in si_omega.items()}
+                star_si = {n: p.data.clone() for n, p in model.named_parameters() if n in si_omega}
+                si_omega_star_list.append((omega_copy, star_si))
 
             prev_models.append(freeze_model(copy.deepcopy(model).to(DEVICE)))
 
@@ -156,12 +177,11 @@ def run_experiment_dream_replay(
 
 
 if __name__ == "__main__":
-    run_experiment_dream_replay(
-        run_name="exp21_dream_replay",
+    run_experiment_vae_si(
+        run_name="exp27_vae_pseudo_replay_si",
         config={"lambda_slice": 2.0, "lambda_feat": 0.5},
         script_file=os.path.abspath(__file__),
         vae_epochs=5,
-        dream_interval=5,
-        dream_batch_ratio=0.5,
         vae_n_fake_per_task=32,
+        si_lambda=1.0,
     )

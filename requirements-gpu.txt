@@ -1,0 +1,22 @@
+# IdeasLab 实验依赖（GPU 版）
+# 本机有 NVIDIA 显卡时，先卸载 CPU 版再装 GPU 版，实验会自动使用 cuda。
+#
+# 1) 查看显卡与驱动：在 CMD 运行  nvidia-smi  ，看右上角 CUDA Version（如 12.1）。
+# 2) 在项目 venv 中先卸载再安装（选一条，与驱动支持的 CUDA 对应）：
+#
+#    CUDA 11.8:
+#    pip uninstall -y torch torchvision torchaudio
+#    pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cu118
+#
+#    CUDA 12.1:
+#    pip uninstall -y torch torchvision torchaudio
+#    pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cu121
+#
+#    CUDA 12.4:
+#    pip uninstall -y torch torchvision torchaudio
+#    pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cu124
+#
+# 3) 安装其余依赖：  pip install numpy
+# 4) 验证：  python -c "import torch; print(torch.cuda.is_available())"  应输出 True
+#
+numpy

@@ -246,5 +246,9 @@ class ExperimentManager:
             save_model(self.exp_dir, model)
 
         update_readme(self.run_name, self.exp_dir, self.script_file, self.config, metrics)
-        print(f"[ExperimentManager] 结果已保存到: {self.exp_dir}")
-        print(f"[ExperimentManager] README 已更新")
+        try:
+            print(f"[ExperimentManager] 结果已保存到: {self.exp_dir}")
+            print(f"[ExperimentManager] README 已更新")
+        except UnicodeEncodeError:
+            print(f"[ExperimentManager] Results saved to: {self.exp_dir}")
+            print(f"[ExperimentManager] README updated")
