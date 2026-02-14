@@ -1,0 +1,22 @@
+{
+  "device": "cpu",
+  "lr": 0.005,
+  "epochs_per_task": 4,
+  "batch_size": 128,
+  "lambda_slice": 2.0,
+  "lambda_feat": 0.5,
+  "use_cosine_head": true,
+  "seed": 42,
+  "freeze_backbone_after_task": -1,
+  "ewc_lambda": 0.0,
+  "si_lambda": 1.0,
+  "use_attention_backbone": false,
+  "use_adapters": false,
+  "lambda_slice_balance": 0.0,
+  "lambda_slice_margin": 0.0,
+  "slice_margin": 0.5,
+  "use_task_inference": false,
+  "lambda_task_inference": 1.0,
+  "script_file": "split_mnist\\exp7_si.py",
+  "experiment_group": "split_mnist"
+}

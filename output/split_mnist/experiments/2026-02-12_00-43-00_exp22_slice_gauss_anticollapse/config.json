@@ -1,0 +1,12 @@
+{
+  "device": "cpu",
+  "lr": 0.005,
+  "epochs_per_task": 4,
+  "batch_size": 128,
+  "lambda_slice": 2.0,
+  "lambda_feat": 0.5,
+  "proto_aug_n_per_class": 8,
+  "lambda_ac": 0.1,
+  "script_file": "split_mnist\\exp22_slice_gauss_anticollapse.py",
+  "experiment_group": "split_mnist"
+}

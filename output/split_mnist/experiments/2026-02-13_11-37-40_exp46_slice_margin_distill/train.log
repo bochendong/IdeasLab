@@ -1,0 +1,158 @@
+2026-02-13 11:37:40,069 - INFO - Device: cuda
+2026-02-13 11:37:40,069 - INFO - Config: {'device': 'cuda', 'lr': 0.005, 'epochs_per_task': 4, 'batch_size': 128, 'lambda_slice': 2.0, 'lambda_feat': 0.5, 'vae_epochs': 5, 'vae_n_fake_per_task': 32, 'lambda_adv_feat': 0.1, 'lambda_adv_slice': 0.1, 'slice_margin': 0.3, 'lambda_margin': 0.5, 'lambda_distill': 0.5, 'distill_T': 2.0}
+2026-02-13 11:37:40,183 - INFO - ========== Task 0: classes [0, 1] ==========
+2026-02-13 11:38:09,945 - INFO - [Task 0 | ep 0 | step 0] loss=0.8626 | CI_T0=96.85%
+2026-02-13 11:38:14,371 - INFO - [Task 0 | ep 0 | step 25] loss=0.0311 | CI_T0=99.83%
+2026-02-13 11:38:18,784 - INFO - [Task 0 | ep 0 | step 50] loss=0.0042 | CI_T0=99.86%
+2026-02-13 11:38:23,209 - INFO - [Task 0 | ep 0 | step 75] loss=0.0349 | CI_T0=99.88%
+2026-02-13 11:38:31,472 - INFO - [Task 0 | ep 1 | step 100] loss=0.0008 | CI_T0=99.93%
+2026-02-13 11:38:35,901 - INFO - [Task 0 | ep 1 | step 125] loss=0.0199 | CI_T0=99.93%
+2026-02-13 11:38:40,313 - INFO - [Task 0 | ep 1 | step 150] loss=0.0004 | CI_T0=99.96%
+2026-02-13 11:38:44,711 - INFO - [Task 0 | ep 1 | step 175] loss=0.0004 | CI_T0=99.97%
+2026-02-13 11:38:53,042 - INFO - [Task 0 | ep 2 | step 200] loss=0.0001 | CI_T0=99.96%
+2026-02-13 11:38:57,493 - INFO - [Task 0 | ep 2 | step 225] loss=0.0001 | CI_T0=99.96%
+2026-02-13 11:39:01,888 - INFO - [Task 0 | ep 2 | step 250] loss=0.0001 | CI_T0=99.94%
+2026-02-13 11:39:06,348 - INFO - [Task 0 | ep 2 | step 275] loss=0.0002 | CI_T0=99.97%
+2026-02-13 11:39:14,580 - INFO - [Task 0 | ep 3 | step 300] loss=0.0003 | CI_T0=100.00%
+2026-02-13 11:39:19,022 - INFO - [Task 0 | ep 3 | step 325] loss=0.0001 | CI_T0=99.98%
+2026-02-13 11:39:23,450 - INFO - [Task 0 | ep 3 | step 350] loss=0.0001 | CI_T0=99.99%
+2026-02-13 11:39:27,883 - INFO - [Task 0 | ep 3 | step 375] loss=0.0001 | CI_T0=99.98%
+2026-02-13 11:39:32,721 - INFO - [After Task 0] Task-IL : T0=99.91% | Avg=99.91%
+2026-02-13 11:39:32,721 - INFO - [After Task 0] Class-IL: T0=99.91% | Avg=99.91%
+2026-02-13 11:39:32,721 - INFO - ========== GROUP DIFFERENCES ==========
+2026-02-13 11:39:32,721 - INFO - Seen tasks: 0..0 | valid_out_dim=2
+2026-02-13 11:39:34,920 - INFO - [Group=Task0] CI_acc=99.91% | corr_slice_max=5.153 | best_other_max=nan | gap=nan
+2026-02-13 11:39:34,920 - INFO - [Group=Task0] winner_task_dist: W0=100.0%
+2026-02-13 11:39:34,920 - INFO - [Group=Task0] slice_strength : S0=5.15
+2026-02-13 11:39:34,920 - INFO - ======================================
+2026-02-13 11:39:34,920 - INFO - ========== Task 1: classes [2, 3] ==========
+2026-02-13 11:40:09,134 - INFO - [Task 1 | ep 0 | step 0] loss=6.9049 | CI_T0=99.98% | CI_T1=1.94%
+2026-02-13 11:40:18,198 - INFO - [Task 1 | ep 0 | step 25] loss=2.0398 | CI_T0=34.87% | CI_T1=94.09%
+2026-02-13 11:40:27,229 - INFO - [Task 1 | ep 0 | step 50] loss=2.4525 | CI_T0=21.90% | CI_T1=58.92%
+2026-02-13 11:40:36,173 - INFO - [Task 1 | ep 0 | step 75] loss=2.3461 | CI_T0=27.97% | CI_T1=69.23%
+2026-02-13 11:40:48,973 - INFO - [Task 1 | ep 1 | step 100] loss=2.3383 | CI_T0=18.26% | CI_T1=84.38%
+2026-02-13 11:40:57,978 - INFO - [Task 1 | ep 1 | step 125] loss=2.5924 | CI_T0=8.42% | CI_T1=67.78%
+2026-02-13 11:41:06,868 - INFO - [Task 1 | ep 1 | step 150] loss=3.0161 | CI_T0=24.94% | CI_T1=86.31%
+2026-02-13 11:41:15,768 - INFO - [Task 1 | ep 1 | step 175] loss=2.7955 | CI_T0=24.75% | CI_T1=91.41%
+2026-02-13 11:41:28,913 - INFO - [Task 1 | ep 2 | step 200] loss=2.6968 | CI_T0=40.25% | CI_T1=91.51%
+2026-02-13 11:41:37,797 - INFO - [Task 1 | ep 2 | step 225] loss=2.1863 | CI_T0=22.30% | CI_T1=80.34%
+2026-02-13 11:41:46,718 - INFO - [Task 1 | ep 2 | step 250] loss=2.3496 | CI_T0=20.23% | CI_T1=68.56%
+2026-02-13 11:41:55,536 - INFO - [Task 1 | ep 2 | step 275] loss=2.5990 | CI_T0=26.20% | CI_T1=77.32%
+2026-02-13 11:42:08,456 - INFO - [Task 1 | ep 3 | step 300] loss=3.4415 | CI_T0=13.90% | CI_T1=85.12%
+2026-02-13 11:42:17,362 - INFO - [Task 1 | ep 3 | step 325] loss=2.4981 | CI_T0=15.14% | CI_T1=90.98%
+2026-02-13 11:42:26,259 - INFO - [Task 1 | ep 3 | step 350] loss=2.4207 | CI_T0=13.37% | CI_T1=89.45%
+2026-02-13 11:42:35,240 - INFO - [Task 1 | ep 3 | step 375] loss=2.4809 | CI_T0=40.33% | CI_T1=90.14%
+2026-02-13 11:42:44,377 - INFO - [After Task 1] Task-IL : T0=97.97% | T1=97.01% | Avg=97.49%
+2026-02-13 11:42:44,377 - INFO - [After Task 1] Class-IL: T0=38.35% | T1=90.79% | Avg=64.57%
+2026-02-13 11:42:44,377 - INFO - ========== GROUP DIFFERENCES ==========
+2026-02-13 11:42:44,377 - INFO - Seen tasks: 0..1 | valid_out_dim=4
+2026-02-13 11:42:46,584 - INFO - [Group=Task0] CI_acc=38.35% | corr_slice_max=3.675 | best_other_max=4.305 | gap=-0.630
+2026-02-13 11:42:46,584 - INFO - [Group=Task0] winner_task_dist: W0=38.3% | W1=61.7%
+2026-02-13 11:42:46,584 - INFO - [Group=Task0] slice_strength : S0=3.68 | S1=4.30
+2026-02-13 11:42:48,778 - INFO - [Group=Task1] CI_acc=90.79% | corr_slice_max=4.588 | best_other_max=2.670 | gap=1.917
+2026-02-13 11:42:48,778 - INFO - [Group=Task1] winner_task_dist: W0=7.9% | W1=92.1%
+2026-02-13 11:42:48,778 - INFO - [Group=Task1] slice_strength : S0=2.67 | S1=4.59
+2026-02-13 11:42:48,778 - INFO - ======================================
+2026-02-13 11:42:48,778 - INFO - ========== Task 2: classes [4, 5] ==========
+2026-02-13 11:43:27,188 - INFO - [Task 2 | ep 0 | step 0] loss=7.5577 | CI_T0=57.99% | CI_T1=91.39% | CI_T2=0.16%
+2026-02-13 11:43:40,378 - INFO - [Task 2 | ep 0 | step 25] loss=2.1540 | CI_T0=24.91% | CI_T1=28.79% | CI_T2=63.55%
+2026-02-13 11:43:53,614 - INFO - [Task 2 | ep 0 | step 50] loss=2.1334 | CI_T0=9.82% | CI_T1=27.81% | CI_T2=63.66%
+2026-02-13 11:44:06,914 - INFO - [Task 2 | ep 0 | step 75] loss=2.4186 | CI_T0=24.68% | CI_T1=37.18% | CI_T2=70.62%
+2026-02-13 11:44:24,367 - INFO - [Task 2 | ep 1 | step 100] loss=2.7521 | CI_T0=33.63% | CI_T1=35.91% | CI_T2=65.49%
+2026-02-13 11:44:37,698 - INFO - [Task 2 | ep 1 | step 125] loss=2.6768 | CI_T0=22.59% | CI_T1=30.24% | CI_T2=57.39%
+2026-02-13 11:44:51,118 - INFO - [Task 2 | ep 1 | step 150] loss=2.5070 | CI_T0=8.17% | CI_T1=29.44% | CI_T2=62.72%
+2026-02-13 11:45:08,308 - INFO - [Task 2 | ep 2 | step 175] loss=2.5718 | CI_T0=29.65% | CI_T1=33.44% | CI_T2=69.91%
+2026-02-13 11:45:21,705 - INFO - [Task 2 | ep 2 | step 200] loss=2.4836 | CI_T0=14.98% | CI_T1=34.94% | CI_T2=64.75%
+2026-02-13 11:45:34,903 - INFO - [Task 2 | ep 2 | step 225] loss=2.5815 | CI_T0=14.88% | CI_T1=34.72% | CI_T2=68.45%
+2026-02-13 11:45:48,171 - INFO - [Task 2 | ep 2 | step 250] loss=2.6800 | CI_T0=20.31% | CI_T1=28.78% | CI_T2=74.63%
+2026-02-13 11:46:05,423 - INFO - [Task 2 | ep 3 | step 275] loss=2.6235 | CI_T0=30.89% | CI_T1=31.76% | CI_T2=72.61%
+2026-02-13 11:46:18,788 - INFO - [Task 2 | ep 3 | step 300] loss=2.6774 | CI_T0=22.04% | CI_T1=25.38% | CI_T2=72.44%
+2026-02-13 11:46:32,045 - INFO - [Task 2 | ep 3 | step 325] loss=2.5759 | CI_T0=22.32% | CI_T1=27.71% | CI_T2=77.79%
+2026-02-13 11:46:45,834 - INFO - [After Task 2] Task-IL : T0=89.31% | T1=88.34% | T2=87.35% | Avg=88.34%
+2026-02-13 11:46:45,834 - INFO - [After Task 2] Class-IL: T0=16.93% | T1=24.39% | T2=80.10% | Avg=40.47%
+2026-02-13 11:46:45,834 - INFO - ========== GROUP DIFFERENCES ==========
+2026-02-13 11:46:45,834 - INFO - Seen tasks: 0..2 | valid_out_dim=6
+2026-02-13 11:46:48,068 - INFO - [Group=Task0] CI_acc=16.93% | corr_slice_max=3.210 | best_other_max=4.667 | gap=-1.457
+2026-02-13 11:46:48,068 - INFO - [Group=Task0] winner_task_dist: W0=16.9% | W1=8.1% | W2=74.9%
+2026-02-13 11:46:48,068 - INFO - [Group=Task0] slice_strength : S0=3.21 | S1=3.28 | S2=4.59
+2026-02-13 11:46:50,284 - INFO - [Group=Task1] CI_acc=24.39% | corr_slice_max=4.428 | best_other_max=5.222 | gap=-0.794
+2026-02-13 11:46:50,284 - INFO - [Group=Task1] winner_task_dist: W0=6.4% | W1=25.1% | W2=68.5%
+2026-02-13 11:46:50,284 - INFO - [Group=Task1] slice_strength : S0=2.83 | S1=4.43 | S2=5.16
+2026-02-13 11:46:52,517 - INFO - [Group=Task2] CI_acc=80.10% | corr_slice_max=6.118 | best_other_max=4.197 | gap=1.921
+2026-02-13 11:46:52,517 - INFO - [Group=Task2] winner_task_dist: W0=9.6% | W1=3.7% | W2=86.7%
+2026-02-13 11:46:52,517 - INFO - [Group=Task2] slice_strength : S0=3.73 | S1=3.87 | S2=6.12
+2026-02-13 11:46:52,517 - INFO - ======================================
+2026-02-13 11:46:52,517 - INFO - ========== Task 3: classes [6, 7] ==========
+2026-02-13 11:47:35,183 - INFO - [Task 3 | ep 0 | step 0] loss=9.7003 | CI_T0=21.62% | CI_T1=23.46% | CI_T2=94.40% | CI_T3=0.00%
+2026-02-13 11:47:52,722 - INFO - [Task 3 | ep 0 | step 25] loss=3.2423 | CI_T0=29.58% | CI_T1=29.76% | CI_T2=60.47% | CI_T3=77.98%
+2026-02-13 11:48:10,217 - INFO - [Task 3 | ep 0 | step 50] loss=2.4881 | CI_T0=37.57% | CI_T1=32.26% | CI_T2=58.28% | CI_T3=94.23%
+2026-02-13 11:48:27,714 - INFO - [Task 3 | ep 0 | step 75] loss=2.3672 | CI_T0=23.65% | CI_T1=28.09% | CI_T2=51.03% | CI_T3=97.56%
+2026-02-13 11:48:49,083 - INFO - [Task 3 | ep 1 | step 100] loss=2.6445 | CI_T0=22.39% | CI_T1=16.67% | CI_T2=50.35% | CI_T3=95.49%
+2026-02-13 11:49:06,763 - INFO - [Task 3 | ep 1 | step 125] loss=2.7747 | CI_T0=11.03% | CI_T1=21.71% | CI_T2=55.11% | CI_T3=95.02%
+2026-02-13 11:49:24,436 - INFO - [Task 3 | ep 1 | step 150] loss=2.8440 | CI_T0=27.08% | CI_T1=24.49% | CI_T2=50.68% | CI_T3=95.42%
+2026-02-13 11:49:41,841 - INFO - [Task 3 | ep 1 | step 175] loss=3.0423 | CI_T0=25.83% | CI_T1=22.79% | CI_T2=59.95% | CI_T3=91.67%
+2026-02-13 11:50:03,625 - INFO - [Task 3 | ep 2 | step 200] loss=3.0777 | CI_T0=33.86% | CI_T1=23.12% | CI_T2=53.20% | CI_T3=96.43%
+2026-02-13 11:50:21,377 - INFO - [Task 3 | ep 2 | step 225] loss=3.1083 | CI_T0=13.17% | CI_T1=22.86% | CI_T2=55.89% | CI_T3=95.99%
+2026-02-13 11:50:39,105 - INFO - [Task 3 | ep 2 | step 250] loss=3.3350 | CI_T0=38.01% | CI_T1=24.47% | CI_T2=58.66% | CI_T3=98.00%
+2026-02-13 11:50:56,729 - INFO - [Task 3 | ep 2 | step 275] loss=3.2948 | CI_T0=17.61% | CI_T1=19.29% | CI_T2=56.17% | CI_T3=96.55%
+2026-02-13 11:51:18,228 - INFO - [Task 3 | ep 3 | step 300] loss=3.0407 | CI_T0=36.08% | CI_T1=20.38% | CI_T2=59.04% | CI_T3=97.13%
+2026-02-13 11:51:35,773 - INFO - [Task 3 | ep 3 | step 325] loss=3.0599 | CI_T0=39.91% | CI_T1=19.11% | CI_T2=48.02% | CI_T3=98.45%
+2026-02-13 11:51:53,490 - INFO - [Task 3 | ep 3 | step 350] loss=3.2679 | CI_T0=21.33% | CI_T1=15.96% | CI_T2=52.27% | CI_T3=96.72%
+2026-02-13 11:52:11,184 - INFO - [Task 3 | ep 3 | step 375] loss=3.3424 | CI_T0=53.60% | CI_T1=21.68% | CI_T2=49.87% | CI_T3=95.50%
+2026-02-13 11:52:29,003 - INFO - [After Task 3] Task-IL : T0=99.29% | T1=88.15% | T2=77.21% | T3=99.75% | Avg=91.10%
+2026-02-13 11:52:29,003 - INFO - [After Task 3] Class-IL: T0=22.70% | T1=17.19% | T2=58.00% | T3=92.70% | Avg=47.65%
+2026-02-13 11:52:29,003 - INFO - ========== GROUP DIFFERENCES ==========
+2026-02-13 11:52:29,004 - INFO - Seen tasks: 0..3 | valid_out_dim=8
+2026-02-13 11:52:31,258 - INFO - [Group=Task0] CI_acc=22.70% | corr_slice_max=4.386 | best_other_max=5.133 | gap=-0.748
+2026-02-13 11:52:31,258 - INFO - [Group=Task0] winner_task_dist: W0=22.7% | W1=7.9% | W2=28.1% | W3=41.2%
+2026-02-13 11:52:31,258 - INFO - [Group=Task0] slice_strength : S0=4.39 | S1=3.53 | S2=4.44 | S3=4.70
+2026-02-13 11:52:33,475 - INFO - [Group=Task1] CI_acc=17.19% | corr_slice_max=4.625 | best_other_max=6.178 | gap=-1.553
+2026-02-13 11:52:33,475 - INFO - [Group=Task1] winner_task_dist: W0=3.3% | W1=17.3% | W2=22.8% | W3=56.5%
+2026-02-13 11:52:33,475 - INFO - [Group=Task1] slice_strength : S0=3.01 | S1=4.62 | S2=5.06 | S3=5.61
+2026-02-13 11:52:35,677 - INFO - [Group=Task2] CI_acc=58.00% | corr_slice_max=6.127 | best_other_max=5.852 | gap=0.275
+2026-02-13 11:52:35,677 - INFO - [Group=Task2] winner_task_dist: W0=7.2% | W1=1.8% | W2=62.6% | W3=28.3%
+2026-02-13 11:52:35,677 - INFO - [Group=Task2] slice_strength : S0=3.64 | S1=3.87 | S2=6.13 | S3=5.48
+2026-02-13 11:52:37,890 - INFO - [Group=Task3] CI_acc=92.70% | corr_slice_max=7.857 | best_other_max=6.699 | gap=1.159
+2026-02-13 11:52:37,890 - INFO - [Group=Task3] winner_task_dist: W0=0.0% | W1=0.0% | W2=7.3% | W3=92.7%
+2026-02-13 11:52:37,890 - INFO - [Group=Task3] slice_strength : S0=3.82 | S1=4.37 | S2=6.63 | S3=7.86
+2026-02-13 11:52:37,890 - INFO - ======================================
+2026-02-13 11:52:37,891 - INFO - ========== Task 4: classes [8, 9] ==========
+2026-02-13 11:53:25,051 - INFO - [Task 4 | ep 0 | step 0] loss=10.4237 | CI_T0=54.25% | CI_T1=19.27% | CI_T2=56.93% | CI_T3=93.77% | CI_T4=0.00%
+2026-02-13 11:53:46,869 - INFO - [Task 4 | ep 0 | step 25] loss=3.6150 | CI_T0=17.70% | CI_T1=22.77% | CI_T2=16.12% | CI_T3=60.70% | CI_T4=65.05%
+2026-02-13 11:54:08,784 - INFO - [Task 4 | ep 0 | step 50] loss=2.9701 | CI_T0=42.84% | CI_T1=18.09% | CI_T2=18.94% | CI_T3=55.05% | CI_T4=80.77%
+2026-02-13 11:54:30,551 - INFO - [Task 4 | ep 0 | step 75] loss=2.8024 | CI_T0=35.37% | CI_T1=15.16% | CI_T2=16.05% | CI_T3=50.19% | CI_T4=86.49%
+2026-02-13 11:54:56,481 - INFO - [Task 4 | ep 1 | step 100] loss=2.9016 | CI_T0=37.04% | CI_T1=16.67% | CI_T2=14.34% | CI_T3=48.75% | CI_T4=90.48%
+2026-02-13 11:55:18,482 - INFO - [Task 4 | ep 1 | step 125] loss=2.9099 | CI_T0=32.56% | CI_T1=16.61% | CI_T2=15.11% | CI_T3=43.51% | CI_T4=92.43%
+2026-02-13 11:55:40,530 - INFO - [Task 4 | ep 1 | step 150] loss=3.0607 | CI_T0=38.22% | CI_T1=16.57% | CI_T2=12.79% | CI_T3=42.49% | CI_T4=90.21%
+2026-02-13 11:56:02,549 - INFO - [Task 4 | ep 1 | step 175] loss=3.1110 | CI_T0=31.14% | CI_T1=18.19% | CI_T2=13.71% | CI_T3=32.74% | CI_T4=91.40%
+2026-02-13 11:56:28,456 - INFO - [Task 4 | ep 2 | step 200] loss=3.0139 | CI_T0=40.07% | CI_T1=16.36% | CI_T2=13.60% | CI_T3=45.02% | CI_T4=91.07%
+2026-02-13 11:56:50,421 - INFO - [Task 4 | ep 2 | step 225] loss=3.4538 | CI_T0=44.20% | CI_T1=18.77% | CI_T2=15.95% | CI_T3=43.44% | CI_T4=89.92%
+2026-02-13 11:57:12,360 - INFO - [Task 4 | ep 2 | step 250] loss=3.3232 | CI_T0=32.06% | CI_T1=18.59% | CI_T2=18.77% | CI_T3=51.74% | CI_T4=91.08%
+2026-02-13 11:57:34,293 - INFO - [Task 4 | ep 2 | step 275] loss=2.9954 | CI_T0=45.99% | CI_T1=20.46% | CI_T2=20.60% | CI_T3=50.58% | CI_T4=93.58%
+2026-02-13 11:58:00,094 - INFO - [Task 4 | ep 3 | step 300] loss=3.0926 | CI_T0=36.12% | CI_T1=15.13% | CI_T2=11.54% | CI_T3=48.24% | CI_T4=94.01%
+2026-02-13 11:58:22,324 - INFO - [Task 4 | ep 3 | step 325] loss=3.1962 | CI_T0=55.50% | CI_T1=17.92% | CI_T2=20.49% | CI_T3=56.06% | CI_T4=92.02%
+2026-02-13 11:58:44,161 - INFO - [Task 4 | ep 3 | step 350] loss=3.3190 | CI_T0=20.36% | CI_T1=17.69% | CI_T2=14.30% | CI_T3=50.35% | CI_T4=94.09%
+2026-02-13 11:59:06,739 - INFO - [After Task 4] Task-IL : T0=99.76% | T1=95.35% | T2=91.30% | T3=95.27% | T4=97.48% | Avg=95.83%
+2026-02-13 11:59:06,739 - INFO - [After Task 4] Class-IL: T0=27.28% | T1=21.50% | T2=23.43% | T3=39.17% | T4=89.81% | Avg=40.24%
+2026-02-13 11:59:06,739 - INFO - ========== GROUP DIFFERENCES ==========
+2026-02-13 11:59:06,739 - INFO - Seen tasks: 0..4 | valid_out_dim=10
+2026-02-13 11:59:08,979 - INFO - [Group=Task0] CI_acc=27.28% | corr_slice_max=4.859 | best_other_max=5.544 | gap=-0.685
+2026-02-13 11:59:08,979 - INFO - [Group=Task0] winner_task_dist: W0=27.3% | W1=0.2% | W2=5.4% | W3=25.9% | W4=41.2%
+2026-02-13 11:59:08,979 - INFO - [Group=Task0] slice_strength : S0=4.86 | S1=2.72 | S2=3.88 | S3=4.40 | S4=5.19
+2026-02-13 11:59:11,220 - INFO - [Group=Task1] CI_acc=21.50% | corr_slice_max=4.565 | best_other_max=6.312 | gap=-1.747
+2026-02-13 11:59:11,220 - INFO - [Group=Task1] winner_task_dist: W0=0.6% | W1=21.5% | W2=12.8% | W3=11.7% | W4=53.3%
+2026-02-13 11:59:11,220 - INFO - [Group=Task1] slice_strength : S0=2.65 | S1=4.57 | S2=4.65 | S3=4.47 | S4=6.00
+2026-02-13 11:59:13,399 - INFO - [Group=Task2] CI_acc=23.43% | corr_slice_max=6.400 | best_other_max=7.195 | gap=-0.795
+2026-02-13 11:59:13,399 - INFO - [Group=Task2] winner_task_dist: W0=2.0% | W1=0.7% | W2=23.6% | W3=4.3% | W4=69.3%
+2026-02-13 11:59:13,399 - INFO - [Group=Task2] slice_strength : S0=3.02 | S1=3.32 | S2=6.40 | S3=5.40 | S4=7.10
+2026-02-13 11:59:15,589 - INFO - [Group=Task3] CI_acc=39.17% | corr_slice_max=7.182 | best_other_max=7.556 | gap=-0.375
+2026-02-13 11:59:15,589 - INFO - [Group=Task3] winner_task_dist: W0=0.0% | W1=0.4% | W2=6.0% | W3=39.2% | W4=54.4%
+2026-02-13 11:59:15,589 - INFO - [Group=Task3] slice_strength : S0=3.02 | S1=3.64 | S2=5.80 | S3=7.18 | S4=7.47
+2026-02-13 11:59:17,815 - INFO - [Group=Task4] CI_acc=89.81% | corr_slice_max=8.272 | best_other_max=6.726 | gap=1.546
+2026-02-13 11:59:17,815 - INFO - [Group=Task4] winner_task_dist: W0=0.5% | W1=0.1% | W2=3.8% | W3=5.3% | W4=90.3%
+2026-02-13 11:59:17,815 - INFO - [Group=Task4] slice_strength : S0=3.05 | S1=3.33 | S2=5.84 | S3=6.23 | S4=8.27
+2026-02-13 11:59:17,815 - INFO - ======================================
+2026-02-13 11:59:17,815 - INFO - ========== FINAL METRICS (Class-IL) ==========
+2026-02-13 11:59:17,815 - INFO - Forgetting per task: T0=72.62%, T1=69.29%, T2=56.67%, T3=53.52%, T4=0.00%
+2026-02-13 11:59:17,816 - INFO - BWT: -63.03%
+2026-02-13 11:59:17,816 - INFO - Final average Class-IL accuracy: 40.24%

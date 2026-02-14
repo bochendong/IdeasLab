@@ -1,0 +1,14 @@
+{
+  "device": "cpu",
+  "lr": 0.005,
+  "epochs_per_task": 4,
+  "batch_size": 128,
+  "lambda_slice": 2.0,
+  "lambda_feat": 0.5,
+  "use_cosine_head": true,
+  "seed": 42,
+  "vae_epochs": 5,
+  "vae_n_fake_per_task": 32,
+  "script_file": "split_mnist\\exp9_vae_pseudo_replay.py",
+  "experiment_group": "split_mnist"
+}

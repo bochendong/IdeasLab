@@ -1,0 +1,18 @@
+{
+  "device": "cuda",
+  "lr": 0.005,
+  "epochs_per_task": 4,
+  "batch_size": 128,
+  "lambda_slice": 2.0,
+  "lambda_feat": 0.5,
+  "vae_epochs": 5,
+  "vae_n_fake_per_task": 32,
+  "lambda_adv_feat": 0.1,
+  "lambda_adv_slice": 0.1,
+  "slice_margin": 0.3,
+  "lambda_margin": 0.5,
+  "mix_alpha": 0.4,
+  "lambda_mix": 0.5,
+  "script_file": "split_mnist\\exp47_slice_margin_mixup.py",
+  "experiment_group": "split_mnist"
+}

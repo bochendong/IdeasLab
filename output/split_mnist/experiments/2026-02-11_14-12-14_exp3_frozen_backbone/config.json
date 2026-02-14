@@ -1,0 +1,14 @@
+{
+  "device": "cuda",
+  "lr": 0.005,
+  "epochs_per_task": 4,
+  "batch_size": 128,
+  "lambda_slice": 2.0,
+  "lambda_feat": 0.5,
+  "use_cosine_head": true,
+  "seed": 42,
+  "freeze_backbone_after_task": 0,
+  "ewc_lambda": 0.0,
+  "script_file": "split_mnist\\exp3_frozen_backbone.py",
+  "experiment_group": "split_mnist"
+}

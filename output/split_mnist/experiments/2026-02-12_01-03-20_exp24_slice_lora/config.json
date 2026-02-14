@@ -1,0 +1,11 @@
+{
+  "device": "cpu",
+  "lr": 0.005,
+  "epochs_per_task": 4,
+  "batch_size": 128,
+  "lambda_slice": 2.0,
+  "lambda_feat": 0.5,
+  "lora_rank": 8,
+  "script_file": "split_mnist\\exp24_slice_lora.py",
+  "experiment_group": "split_mnist"
+}

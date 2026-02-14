@@ -1,0 +1,15 @@
+{
+  "device": "cuda",
+  "lr": 0.005,
+  "epochs_per_task": 4,
+  "batch_size": 128,
+  "lambda_slice": 2.0,
+  "lambda_feat": 0.5,
+  "proto_aug_n_per_class": 8,
+  "proto_aug_r": 0.4,
+  "lambda_ac": 0.1,
+  "si_lambda": 1.0,
+  "proto_extra_weight": 0.3,
+  "script_file": "split_mnist\\exp30_slice_gauss_anticollapse_si_proto.py",
+  "experiment_group": "split_mnist"
+}

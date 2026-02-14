@@ -1,0 +1,13 @@
+{
+  "device": "cuda",
+  "lr": 0.005,
+  "epochs_per_task": 4,
+  "batch_size": 128,
+  "lambda_slice": 2.0,
+  "lambda_feat": 0.5,
+  "proto_aug_r": 0.4,
+  "proto_aug_n_per_class": 8,
+  "lambda_adv": 0.1,
+  "script_file": "split_mnist\\exp28_proto_adversarial.py",
+  "experiment_group": "split_mnist"
+}

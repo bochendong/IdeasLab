@@ -1,0 +1,14 @@
+{
+  "device": "cuda",
+  "lr": 0.005,
+  "epochs_per_task": 4,
+  "batch_size": 128,
+  "lambda_slice": 8.0,
+  "lambda_feat": 2.0,
+  "use_cosine_head": true,
+  "seed": 42,
+  "freeze_backbone_after_task": 0,
+  "ewc_lambda": 0.0,
+  "script_file": "split_mnist\\exp5_frozen_stronger_reg.py",
+  "experiment_group": "split_mnist"
+}

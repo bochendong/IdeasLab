@@ -8,9 +8,15 @@ env/
 data/
 *.gz
 
-# 实验输出（日志、指标、模型权重，体积随实验增多变大）
-output/
+# 实验输出（仅忽略模型权重等大文件；train.log / metrics.json / config.json 可提交）
+output/**/*.pt
+output/**/*.pth
+output/**/*.ckpt
+# 根目录及非 output 下的 .log 仍忽略；output 内的 train.log 可提交
 *.log
+!output/**/train.log
+
+# 模型权重（任何位置）
 *.pt
 *.pth
 *.ckpt

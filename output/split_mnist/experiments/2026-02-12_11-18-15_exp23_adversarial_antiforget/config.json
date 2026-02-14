@@ -1,0 +1,13 @@
+{
+  "device": "cpu",
+  "lr": 0.005,
+  "epochs_per_task": 4,
+  "batch_size": 128,
+  "lambda_slice": 2.0,
+  "lambda_feat": 0.5,
+  "vae_epochs": 5,
+  "vae_n_fake_per_task": 32,
+  "lambda_adv": 0.1,
+  "script_file": "split_mnist\\exp23_adversarial_antiforget.py",
+  "experiment_group": "split_mnist"
+}
