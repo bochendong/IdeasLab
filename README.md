@@ -7,7 +7,7 @@
 - **Python** 3.11，venv 后：`pip install -r requirements.txt`
 - **PyTorch**：无显卡用 CPU 版（见 `requirements.txt`）；有 NVIDIA 显卡见下「使用 GPU」。运行实验：`python split_mnist/run_all_experiments.py`
 - **使用 GPU**：`pip uninstall -y torch torchvision torchaudio` 后，按驱动 CUDA 版本装（例 CUDA 12.1）：`pip install torch==2.4.1 torchvision==0.19.1 --index-url https://download.pytorch.org/whl/cu121`。验证：`python -c "import torch; print(torch.cuda.is_available())"` 为 `True`。详见 `requirements-gpu.txt`。
-- **Batch size**：默认 128，占显存约 1G 量级即可跑。若显存有余想加速，可传 `config={"batch_size": 256}` 或运行 CIFAR-10 时加 `--batch_size 256`；若 OOM 可改为 64。
+- **Batch size**：默认 128，占显存约 1G 量级即可跑。若显存有余想加速，可传 `config={"batch_size": 256}`；若 OOM 可改为 64。
 
 ---
 
@@ -16,8 +16,6 @@
 为公平比较，建议**先调出较好的 baseline**，再**固定 lr、epochs_per_task、batch_size、seed** 跑所有其他方法。
 
 **运行扫描**
-- **CIFAR-10**：`python split_cifar10/tune_baseline.py`  
-  默认扫 lr∈{1e-3, 3e-3, 5e-3} × epochs∈{8, 10, 12}，共 9 组。可缩小：`--lr 0.001 0.003 --ep 10 12`
 - **MNIST**：`python split_mnist/tune_baseline.py`  
   默认扫 lr∈{3e-3, 5e-3, 1e-2} × epochs∈{4, 6, 8}。可指定：`--lr 0.005 --ep 4 6`
 
@@ -74,79 +72,27 @@ Task-IL：提供任务 ID 时的平均准确率；Class-IL：不提供任务 ID�
 | Baseline | — | 25.69% | -92.21% | 基准 |
 | Exp18 / Exp10 / Exp13 | — | 19%～23% | -95%～-98% | 更差或崩塌 |
 
-结果目录：`output/split_mnist/experiments/`、`output/split_cifar10/experiments/` 等（按数据集划分；每实验含 `metrics.json`、`train.log`、**`config.json`**）。后续可扩展 CIFAR-100 等，结构不变。  
-**横向对比与超参**：运行 `python scripts/aggregate_results.py` 生成多数据集并排对比与主要超参表，见 [docs/experiment_results.md](docs/experiment_results.md)。
+结果目录：`output/split_mnist/experiments/`（每实验含 `metrics.json`、`train.log`、**`config.json`**）。  
+**横向对比与超参**：运行 `python scripts/aggregate_results.py` 生成主要超参表，见 [docs/experiment_results.md](docs/experiment_results.md)。
 
 ---
 
-## Split CIFAR-10 实验结果（无回放）
+## AdaGauss 复现（CIFAR-100，无回放 Class-IL 参考）
 
-- **设定**：5 任务 Split CIFAR-10，**无回放**，Class-IL；小 3 层 CNN + 256 维 cosine head，10 epoch/任务，lr=1e-3，与 MNIST 协议一致。
-- **结论**：在 MNIST 上有效的多种方法（双判别器、slice margin、VAE+SI、加强伪回放等）在 CIFAR-10 上**均未超过 baseline**，部分明显更差。可能原因：任务更难、特征中「slice 结构」未必形成、模型容量吃紧、VAE 伪样本质量差、超参沿用 MNIST 未针对 CIFAR-10 调。详见下方「MNIST vs CIFAR-10 简要分析」。
+复现论文 **AdaGauss (NeurIPS 2024)** 作为无回放 Class-IL 参考（论文报 CIFAR-100 10×10 约 **60.2%**）。代码已克隆至 `benchmarks/AdaGauss/`，数据路径已指向项目 `data/`。
 
-| 实验 | Class-IL ↑ | BWT | 备注 |
-|------|------------|-----|------|
-| **Baseline** | **27.03%** | -81.89% | 基准（含 slice/feat 蒸馏） |
-| **EWC** | 27.03% | -81.89% | 与 baseline 完全一致，疑超参或需重跑 |
-| **SI** | 27.03% | -81.89% | 同上 |
-| **Slice margin** | 23.32% | -69.84% | BWT 最好，但 Class-IL 低于 baseline |
-| **VAE+SI** | 19.01% | -87.14% | 伪 replay 质量差可能拖累 |
-| **Stronger replay** | 18.52% | -86.93% | 同上 |
-| **Dual discriminator** | 17.01% | -75.15% | 低于 baseline |
-
-结果目录：`output/split_cifar10/experiments/`。运行：`python split_cifar10/run_cifar10_experiments.py`（支持 `--only`、`--list`）。
-
----
-
-## MNIST vs CIFAR-10 横向对比与超参
-
-以下横向对比表由 `python scripts/aggregate_results.py` 生成（每数据集每方法取最新一次 run）。运行 `python scripts/aggregate_results.py --update-readme` 可刷新下表。
-
-<!-- AGGREGATE_TABLE -->
-
-| 方法 | MNIST Class-IL ↑ | MNIST BWT | CIFAR-10 Class-IL ↑ | CIFAR-10 BWT |
-|------|------------------|-----------|----------------------|--------------|
-| Baseline | 25.69% | -92.21% | 27.03% | -81.89% |
-| EWC | 29.02% | -87.92% | 27.03% | -81.89% |
-| SI | 34.15% | -80.88% | 27.03% | -81.89% |
-| VAE+SI | 45.82% | -64.59% | 19.01% | -87.14% |
-| Dual discriminator | 46.21% | -57.05% | 17.01% | -75.15% |
-| Slice margin | 50.20% | -49.92% | 23.32% | -69.84% |
-| Stronger replay | 46.77% | -52.17% | 18.52% | -86.93% |
-
-<!-- END_AGGREGATE_TABLE -->
-
-**全部实验及主要超参**见 [docs/experiment_results.md](docs/experiment_results.md)。每实验完整超参见 `output/<数据集>/experiments/<实验目录>/config.json`。
-
-
----
-
-**无 replay 下利用 Task-IL 推高 Class-IL（新实验，目标 50%+）**  
-核心发现：**我们的方法基本能保持 Task-IL**，即便在 CIFAR-10 上亦然；问题是如何把这一点用到「不提供 task ID」的 Class-IL 设定。新增三类无 replay 实验，均不依赖 VAE/伪样本：
-
-| 实验 key | 做法 | 评估 |
-|----------|------|------|
-| **task_routing_si** | 训练 task_head(slice_vec)→task_id，推理时先预测任务再在该 slice 内分类（Task-IL 当 Class-IL 用） | 报 Class-IL（标准）与 **Class-IL(routed)** |
-| **current_margin_si** | 仅在当前任务真实数据上显式 margin（正确 slice 比其它大 margin）+ SI | 标准 Class-IL |
-| **task_routing_margin_si** | 任务路由 + 当前任务 margin + SI 组合 | 报 Class-IL 与 Class-IL(routed) |
-
-运行新实验：`python split_cifar10/run_cifar10_experiments.py --only task_routing_si current_margin_si task_routing_margin_si`。若 **Class-IL(routed)** 明显高于标准 Class-IL，说明「先推断 task 再分类」能有效利用已保持的 Task-IL，可视为无 replay 下将 Task-IL 转化为 Class-IL 的路径。
-
-**MNIST vs CIFAR-10 简要分析**  
-MNIST 上 Class-IL 可达 50%+、多种方法优于 baseline；CIFAR-10 上 baseline 约 27%、各方法未超越。主要原因：（1）**slice 假设**在 MNIST 上成立、在 CIFAR-10 上小 CNN 特征更噪，slice 结构未必存在；（2）**模型容量**在 CIFAR-10 上吃紧，正则易削弱可塑性；（3）**遗忘更极端**（CIFAR-10 上几乎只记得最后一任务），纯正则难以挽回；（4）**VAE 伪样本**在 CIFAR-10 上质量差，伪回放易成噪声；（5）**超参**沿用 MNIST，未为 CIFAR-10 单独调。论文中可写：方法在「特征具可分离 slice 结构」的简单设定下有效，在更复杂数据上需更强 backbone / 调参 / 或少量 replay 以验证可迁移性。
+- **运行**：见 [benchmarks/README.md](benchmarks/README.md)。快速试跑：`.\benchmarks\run_ada_gauss.ps1`；完整 200 epoch/任务：`.\benchmarks\run_ada_gauss.ps1 -Full`。
+- **结果目录**：`output/adagauss_results/` 或 `output/adagauss_quick/`；实验记录见 [docs/adagauss_results.md](docs/adagauss_results.md)。
 
 ---
 
 ## 实验总结
 
-- **Split MNIST（无回放）**：当前最佳为 **Exp35（双判别器 + slice margin）**，Class-IL **50.20%**、BWT **-49.92%**。显式约束「正确 slice 比其它大一截」直接对准决策层 gap，收益最大。第二梯队（45%～47%）包括加强伪回放（Exp34）、anti-collapse（Exp39）、slice 一致性（Exp42）、EFM（Exp40）、双判别器+原型（Exp36）等，均在双判别器基线上叠加「更多伪回放 / 防坍缩 / 一致性 / 特征漂移正则」带来增量。双判别器上再叠 SI（Exp33）或固定 50% 伪回放（Exp37）、正交（Exp41）在本设定下未超过基线。
-- **Split CIFAR-10（无回放）**：各方法均未超过 baseline（27.03%），可能原因包括任务更难、slice 结构未必形成、VAE 伪样本质量差、超参沿用 MNIST 等；横向对比与超参见 [docs/experiment_results.md](docs/experiment_results.md)。后续可扩展至 CIFAR-100 等数据集，结果目录与汇总脚本均按数据集划分，便于追加。
+- **Split MNIST（无回放）**：当前最佳为 **Exp35（双判别器 + slice margin）**，Class-IL **50.20%**、BWT **-49.92%**。显式约束「正确 slice 比其它大一截」直接对准决策层 gap，收益最大。第二梯队（45%～47%）包括加强伪回放（Exp34）、anti-collapse（Exp39）、slice 一致性（Exp42）、EFM（Exp40）、双判别器+原型（Exp36）等。
 
 ---
 
 ## 方法共性
-
-以上思路在 **Split MNIST** 与 **Split CIFAR-10** 上均做了验证：MNIST 上双判别器 + slice margin 等明显抬升 Class-IL；CIFAR-10 上各方法暂未超过 baseline，可能因任务更难、slice 结构未充分形成或超参沿用 MNIST，可扩展 CIFAR-100 等再验证可迁移性。
 
 - **伪回放**：在新任务阶段仍对「旧类」代理（VAE 伪样本或原型+噪声）做 CE，使旧 slice 持续得到正向更新，缓解被新任务 slice 压过。
 - **稳固**：分两层——**参数层**（如 SI 限制重要参数改动）与**表征/决策层**（对抗：特征或 slice 不要一边倒向新任务）。叠加优于单用（如 VAE+SI、特征+slice 双判别）。
@@ -174,7 +120,7 @@ MNIST 上 Class-IL 可达 50%+、多种方法优于 baseline；CIFAR-10 上 base
 | **Slice margin** | 正确 slice 与其它 slice 的 gap 不足 | 显式把「正确 slice 比其它大一截」写进目标，直接对准失败形式。 |
 
 **结论**  
-伪回放是起效前提；稳固分参数层（SI）与表征/决策层（对抗），双判别器同时约束两层故更稳；在决策层再加 slice margin 进一步抬升 Class-IL。在更复杂或不同数据集（如 CIFAR-10/100）上，slice 结构未必形成，需更强 backbone 或调参以验证可迁移性。  
+伪回放是起效前提；稳固分参数层（SI）与表征/决策层（对抗），双判别器同时约束两层故更稳；在决策层再加 slice margin 进一步抬升 Class-IL。在更复杂或不同数据集上，slice 结构未必形成，需更强 backbone 或调参以验证可迁移性。  
 
 ---
 
@@ -235,7 +181,6 @@ MNIST 上 Class-IL 可达 50%+、多种方法优于 baseline；CIFAR-10 上 base
 
 ## 实验列表
 
-| 时间 | 脚本 | 实验名 | Final Avg Class-IL | BWT | Forgetting | 结果目录 / Log |
-| --- | --- | --- | --- | --- | --- | --- |
-| 2026-02-13 | split_cifar10\exp_baseline.py | cifar10_baseline_tune_20260213_1740_lr0.001_ep8 | 27.08% | -81.35% | T0=96.2%, T1=84.2%, T2=86.8%, T3=58.1%, T4=0.0% | [结果目录](output\split_cifar10\experiments\2026-02-13_17-40-47_cifar10_baseline_tune_20260213_1740_lr0.001_ep8) · [train.log](output\split_cifar10\experiments\2026-02-13_17-40-47_cifar10_baseline_tune_20260213_1740_lr0.001_ep8/train.log) |
+- **Split MNIST**：见 `output/split_mnist/experiments/`，汇总见 [docs/experiment_results.md](docs/experiment_results.md)。
+- **AdaGauss（CIFAR-100）**：见 [docs/adagauss_results.md](docs/adagauss_results.md)，结果目录 `output/adagauss_results/` 或 `output/adagauss_quick/`。
 

@@ -6,3 +6,6 @@
 torch==2.4.1+cpu
 torchvision==0.19.1+cpu
 numpy
+# AdaGauss 复现（last_layer_analysis、approach 等）
+matplotlib
+torchmetrics

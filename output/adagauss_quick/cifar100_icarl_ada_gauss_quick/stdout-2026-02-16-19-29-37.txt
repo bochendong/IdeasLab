@@ -1,0 +1,578 @@
+Files already downloaded and verified
+Files already downloaded and verified
+[(0, 10), (1, 10), (2, 10), (3, 10), (4, 10), (5, 10), (6, 10), (7, 10), (8, 10), (9, 10)]
+************************************************************************************************************
+Task  0
+************************************************************************************************************
+### Training backbone ###
+The model has 11,201,664 trainable parameters
+The expert has 0 shared parameters
+
+Epoch: 0 Train: 2.86 KD: 0.000 Acc: 6.08 Singularity: -0.828 Det: 0.00000 Val: 0.00 KD: 0.000 Acc: 0.00
+Epoch: 1 Train: 2.55 KD: 0.000 Acc: 9.92 Singularity: -0.862 Det: 0.00000 Val: 0.00 KD: 0.000 Acc: 0.00
+### Creating new prototypes ###
+
+Cov matrix det: tensor([1.4019e-01, 9.3408e-01, 6.9777e-06, 2.7779e-03, 6.1869e+02, 7.9701e-01,
+        4.7151e-02, 8.3535e-06, 1.5401e-08, 4.4619e+03], device='cuda:0')
+Rank for class 0: 64, 64
+Rank for class 1: 64, 64
+Rank for class 2: 64, 64
+Rank for class 3: 64, 64
+Rank for class 4: 64, 64
+Rank for class 5: 64, 64
+Rank for class 6: 64, 64
+Rank for class 7: 64, 64
+Rank for class 8: 64, 64
+Rank for class 9: 64, 64
+### 0.95 of eigenvalues sum is explained by: ###
+Task 0: [36]
+### Norms per task: ###
+Means: [27.41]
+GT Means: [27.41]
+Covs: [103.52]
+GT Covs: [103.52]
+Inverted Covs: [14.9]
+GT Inverted Covs: [14.9]
+Mahalanobis per task: [188.67999267578125]
+------------------------------------------------------------------------------------------------------------
+>>> Train on task  0 : loss=0.000 | TAw acc= 40.5%, forg=  0.0%| TAg acc= 40.5%, forg=  0.0% <<<
+>>> Test on task  0 : loss=0.000 | TAw acc= 39.7%, forg=  0.0%| TAg acc= 39.7%, forg=  0.0% <<<
+Save at C:\Users\yumi\Documents\GitHub\IdeasLab\output\adagauss_quick\cifar100_icarl_ada_gauss_quick/
+************************************************************************************************************
+Task  1
+************************************************************************************************************
+### Training backbone ###
+The model has 11,201,664 trainable parameters
+The expert has 0 shared parameters
+
+Epoch: 0 Train: 4.58 KD: 10.143 Acc: 9.98 Singularity: -0.863 Det: 0.00000 Val: 0.00 KD: 0.000 Acc: 0.00
+Epoch: 1 Train: 4.40 KD: 4.311 Acc: 9.98 Singularity: -0.862 Det: 0.00000 Val: 0.00 KD: 0.000 Acc: 0.00
+### Adapting prototypes ###
+Epoch: 0 Train loss: 3.82 Val loss: 0.00 Singularity: -0.200 Det: 0.00000
+### Adaptation evaluation ###
+Old train mean diff: 3.89 ± 0.59
+New train mean diff: 4.41 ± 1.83
+Old train cov diff: 24.73 ± 12.08
+New train cov diff: 49.77 ± 30.65
+Old train norm-cov diff: 5.36 ± 1.04
+New train norm-cov diff: 24.08 ± 3.21
+Old train KLD: 6.03 ± 1.06
+New train KLD: 2115.44 ± 509.10
+
+Old val mean diff: 4.29 ± 1.14
+New val mean diff: 4.75 ± 1.49
+Old val cov diff: 37.45 ± 19.16
+New val cov diff: 60.20 ± 39.68
+Old val norm-cov diff: 7.95 ± 2.49
+New val norm-cov diff: 23.59 ± 3.00
+Old val KLD: 30.40 ± 3.71
+New val KLD: 2151.01 ± 474.59
+
+### Creating new prototypes ###
+
+Cov matrix det: tensor([0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 4.0928e+04, 2.9941e-04,
+        2.2767e-07, 3.3152e+01, 2.5259e-04, 9.7761e+03, 2.9272e-01, 9.9624e-10,
+        6.5672e-10, 2.2975e-08], device='cuda:0')
+Rank for class 0: 64, 55
+Rank for class 1: 64, 56
+Rank for class 2: 64, 53
+Rank for class 3: 64, 55
+Rank for class 4: 64, 62
+Rank for class 5: 64, 55
+Rank for class 6: 64, 54
+Rank for class 7: 64, 52
+Rank for class 8: 64, 50
+Rank for class 9: 64, 59
+Rank for class 10: 64, 64
+Rank for class 11: 64, 64
+Rank for class 12: 64, 64
+Rank for class 13: 64, 64
+Rank for class 14: 64, 64
+Rank for class 15: 64, 64
+Rank for class 16: 64, 64
+Rank for class 17: 64, 64
+Rank for class 18: 64, 64
+Rank for class 19: 64, 64
+### 0.95 of eigenvalues sum is explained by: ###
+Task 0: [36]
+Task 1: [34, 40]
+### Norms per task: ###
+Means: [26.02, 25.86]
+GT Means: [28.21, 25.86]
+Covs: [87.26, 88.05]
+GT Covs: [104.74, 88.05]
+Inverted Covs: [524.33, 15.59]
+GT Inverted Covs: [15.4, 15.59]
+Mahalanobis per task: [193.60484313964844, 167.2308349609375]
+------------------------------------------------------------------------------------------------------------
+>>> Train on task  0 : loss=0.000 | TAw acc= 30.7%, forg=  9.8%| TAg acc=  7.9%, forg= 32.6% <<<
+>>> Test on task  0 : loss=0.000 | TAw acc= 29.8%, forg=  9.9%| TAg acc=  6.7%, forg= 33.0% <<<
+Save at C:\Users\yumi\Documents\GitHub\IdeasLab\output\adagauss_quick\cifar100_icarl_ada_gauss_quick/
+>>> Train on task  1 : loss=0.000 | TAw acc= 35.7%, forg=  0.0%| TAg acc= 34.6%, forg=  0.0% <<<
+>>> Test on task  1 : loss=0.000 | TAw acc= 34.5%, forg=  0.0%| TAg acc= 33.1%, forg=  0.0% <<<
+Save at C:\Users\yumi\Documents\GitHub\IdeasLab\output\adagauss_quick\cifar100_icarl_ada_gauss_quick/
+************************************************************************************************************
+Task  2
+************************************************************************************************************
+### Training backbone ###
+The model has 11,201,664 trainable parameters
+The expert has 0 shared parameters
+
+Epoch: 0 Train: 3.93 KD: 9.481 Acc: 10.44 Singularity: -0.867 Det: 0.00000 Val: 0.00 KD: 0.000 Acc: 0.00
+Epoch: 1 Train: 3.82 KD: 4.203 Acc: 10.76 Singularity: -0.866 Det: 0.00000 Val: 0.00 KD: 0.000 Acc: 0.00
+### Adapting prototypes ###
+Epoch: 0 Train loss: 3.58 Val loss: 0.00 Singularity: -0.201 Det: 0.00000
+### Adaptation evaluation ###
+Old train mean diff: 1.69 ± 0.69
+New train mean diff: 3.30 ± 0.46
+Old train cov diff: 18.30 ± 11.77
+New train cov diff: 36.61 ± 16.96
+Old train norm-cov diff: 4.46 ± 1.29
+New train norm-cov diff: 21.91 ± 1.06
+Old train KLD: 3.86 ± 1.32
+New train KLD: 1615.18 ± 205.09
+
+Old val mean diff: 2.06 ± 0.75
+New val mean diff: 3.36 ± 0.55
+Old val cov diff: 28.68 ± 17.02
+New val cov diff: 40.26 ± 18.91
+Old val norm-cov diff: 7.58 ± 1.83
+New val norm-cov diff: 22.63 ± 1.89
+Old val KLD: 29.73 ± 4.74
+New val KLD: 1630.99 ± 237.01
+
+### Creating new prototypes ###
+
+Cov matrix det: tensor([0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 1.3538e-04, 4.3435e-01, 7.8060e-09, 1.0690e-05,
+        3.1186e-05, 5.2686e-07, 5.0337e-03, 1.6247e-05, 1.6573e-01, 2.0889e+00],
+       device='cuda:0')
+Rank for class 0: 64, 14
+Rank for class 1: 64, 15
+Rank for class 2: 64, 14
+Rank for class 3: 64, 14
+Rank for class 4: 64, 17
+Rank for class 5: 64, 15
+Rank for class 6: 64, 14
+Rank for class 7: 64, 14
+Rank for class 8: 64, 13
+Rank for class 9: 64, 17
+Rank for class 10: 64, 62
+Rank for class 11: 64, 51
+Rank for class 12: 64, 50
+Rank for class 13: 64, 54
+Rank for class 14: 64, 54
+Rank for class 15: 64, 60
+Rank for class 16: 64, 56
+Rank for class 17: 64, 48
+Rank for class 18: 64, 48
+Rank for class 19: 64, 51
+Rank for class 20: 64, 64
+Rank for class 21: 64, 64
+Rank for class 22: 64, 64
+Rank for class 23: 64, 64
+Rank for class 24: 64, 64
+Rank for class 25: 64, 64
+Rank for class 26: 64, 64
+Rank for class 27: 64, 64
+Rank for class 28: 64, 64
+Rank for class 29: 64, 64
+### 0.95 of eigenvalues sum is explained by: ###
+Task 0: [36]
+Task 1: [34, 40]
+Task 2: [35, 40, 40]
+### Norms per task: ###
+Means: [24.0, 23.52, 26.79]
+GT Means: [27.58, 25.32, 26.79]
+Covs: [77.12, 64.55, 78.4]
+GT Covs: [94.65, 82.21, 78.4]
+Inverted Covs: [11576.63, 585.55, 15.62]
+GT Inverted Covs: [16.54, 16.7, 15.62]
+Mahalanobis per task: [199.1558837890625, 167.74366760253906, 158.74830627441406]
+------------------------------------------------------------------------------------------------------------
+>>> Train on task  0 : loss=0.000 | TAw acc= 29.3%, forg= 11.2%| TAg acc=  4.3%, forg= 36.2% <<<
+>>> Test on task  0 : loss=0.000 | TAw acc= 28.3%, forg= 11.4%| TAg acc=  4.5%, forg= 35.2% <<<
+Save at C:\Users\yumi\Documents\GitHub\IdeasLab\output\adagauss_quick\cifar100_icarl_ada_gauss_quick/
+>>> Train on task  1 : loss=0.000 | TAw acc= 27.6%, forg=  8.1%| TAg acc=  0.6%, forg= 33.9% <<<
+>>> Test on task  1 : loss=0.000 | TAw acc= 26.1%, forg=  8.4%| TAg acc=  1.1%, forg= 32.0% <<<
+Save at C:\Users\yumi\Documents\GitHub\IdeasLab\output\adagauss_quick\cifar100_icarl_ada_gauss_quick/
+>>> Train on task  2 : loss=0.000 | TAw acc= 42.9%, forg=  0.0%| TAg acc= 42.1%, forg=  0.0% <<<
+>>> Test on task  2 : loss=0.000 | TAw acc= 40.8%, forg=  0.0%| TAg acc= 40.0%, forg=  0.0% <<<
+Save at C:\Users\yumi\Documents\GitHub\IdeasLab\output\adagauss_quick\cifar100_icarl_ada_gauss_quick/
+************************************************************************************************************
+Task  3
+************************************************************************************************************
+### Training backbone ###
+The model has 11,201,664 trainable parameters
+The expert has 0 shared parameters
+
+Epoch: 0 Train: 4.09 KD: 9.209 Acc: 9.70 Singularity: -0.865 Det: 0.00000 Val: 0.00 KD: 0.000 Acc: 0.00
+Epoch: 1 Train: 4.06 KD: 3.566 Acc: 9.40 Singularity: -0.866 Det: 0.00000 Val: 0.00 KD: 0.000 Acc: 0.00
+### Adapting prototypes ###
+Epoch: 0 Train loss: 3.81 Val loss: 0.00 Singularity: -0.190 Det: 0.00000
+### Adaptation evaluation ###
+Old train mean diff: 1.72 ± 0.60
+New train mean diff: 3.67 ± 1.03
+Old train cov diff: 17.10 ± 6.61
+New train cov diff: 40.34 ± 14.15
+Old train norm-cov diff: 3.37 ± 0.62
+New train norm-cov diff: 22.42 ± 1.59
+Old train KLD: 2.54 ± 1.04
+New train KLD: 1964.75 ± 349.41
+
+Old val mean diff: 2.19 ± 1.08
+New val mean diff: 3.91 ± 1.02
+Old val cov diff: 30.26 ± 21.08
+New val cov diff: 46.60 ± 26.09
+Old val norm-cov diff: 7.20 ± 1.46
+New val norm-cov diff: 23.20 ± 1.57
+Old val KLD: 25.83 ± 2.46
+New val KLD: 1953.80 ± 337.78
+
+### Creating new prototypes ###
+
+Cov matrix det: tensor([0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        1.1397e-04, 2.7689e-05, 9.8066e-02, 1.4490e-01, 3.9998e-03, 8.4779e-04,
+        1.2861e+03, 7.3898e+00, 5.2721e-03, 8.7031e-06], device='cuda:0')
+Rank for class 0: 64, 7
+Rank for class 1: 64, 8
+Rank for class 2: 64, 6
+Rank for class 3: 64, 7
+Rank for class 4: 64, 9
+Rank for class 5: 64, 7
+Rank for class 6: 64, 6
+Rank for class 7: 64, 6
+Rank for class 8: 64, 6
+Rank for class 9: 64, 7
+Rank for class 10: 64, 16
+Rank for class 11: 64, 12
+Rank for class 12: 64, 12
+Rank for class 13: 64, 14
+Rank for class 14: 64, 15
+Rank for class 15: 64, 16
+Rank for class 16: 64, 14
+Rank for class 17: 64, 11
+Rank for class 18: 64, 11
+Rank for class 19: 64, 11
+Rank for class 20: 64, 51
+Rank for class 21: 64, 55
+Rank for class 22: 64, 49
+Rank for class 23: 64, 53
+Rank for class 24: 64, 50
+Rank for class 25: 64, 49
+Rank for class 26: 64, 50
+Rank for class 27: 64, 54
+Rank for class 28: 64, 57
+Rank for class 29: 64, 53
+Rank for class 30: 64, 64
+Rank for class 31: 64, 64
+Rank for class 32: 64, 64
+Rank for class 33: 64, 64
+Rank for class 34: 64, 64
+Rank for class 35: 64, 64
+Rank for class 36: 64, 64
+Rank for class 37: 64, 64
+Rank for class 38: 64, 64
+Rank for class 39: 64, 64
+### 0.95 of eigenvalues sum is explained by: ###
+Task 0: [36]
+Task 1: [34, 40]
+Task 2: [35, 40, 40]
+Task 3: [34, 38, 38, 40]
+### Norms per task: ###
+Means: [23.39, 22.54, 26.11, 27.02]
+GT Means: [28.62, 26.13, 27.92, 27.02]
+Covs: [86.64, 72.39, 72.32, 86.8]
+GT Covs: [104.89, 94.7, 90.48, 86.8]
+Inverted Covs: [143023.92, 13703.71, 623.69, 14.85]
+GT Inverted Covs: [16.25, 16.42, 15.29, 14.85]
+Mahalanobis per task: [232.73129272460938, 194.65480041503906, 178.28883361816406, 157.67514038085938]
+------------------------------------------------------------------------------------------------------------
+>>> Train on task  0 : loss=0.000 | TAw acc= 27.5%, forg= 13.0%| TAg acc=  6.1%, forg= 34.4% <<<
+>>> Test on task  0 : loss=0.000 | TAw acc= 26.4%, forg= 13.3%| TAg acc=  6.2%, forg= 33.5% <<<
+Save at C:\Users\yumi\Documents\GitHub\IdeasLab\output\adagauss_quick\cifar100_icarl_ada_gauss_quick/
+>>> Train on task  1 : loss=0.000 | TAw acc= 26.0%, forg=  9.7%| TAg acc=  0.3%, forg= 34.3% <<<
+>>> Test on task  1 : loss=0.000 | TAw acc= 26.4%, forg=  8.1%| TAg acc=  0.3%, forg= 32.8% <<<
+Save at C:\Users\yumi\Documents\GitHub\IdeasLab\output\adagauss_quick\cifar100_icarl_ada_gauss_quick/
+>>> Train on task  2 : loss=0.000 | TAw acc= 31.9%, forg= 11.0%| TAg acc=  1.4%, forg= 40.7% <<<
+>>> Test on task  2 : loss=0.000 | TAw acc= 31.9%, forg=  8.9%| TAg acc=  2.3%, forg= 37.7% <<<
+Save at C:\Users\yumi\Documents\GitHub\IdeasLab\output\adagauss_quick\cifar100_icarl_ada_gauss_quick/
+>>> Train on task  3 : loss=0.000 | TAw acc= 37.5%, forg=  0.0%| TAg acc= 35.4%, forg=  0.0% <<<
+>>> Test on task  3 : loss=0.000 | TAw acc= 35.4%, forg=  0.0%| TAg acc= 33.8%, forg=  0.0% <<<
+Save at C:\Users\yumi\Documents\GitHub\IdeasLab\output\adagauss_quick\cifar100_icarl_ada_gauss_quick/
+************************************************************************************************************
+Task  4
+************************************************************************************************************
+### Training backbone ###
+The model has 11,201,664 trainable parameters
+The expert has 0 shared parameters
+
+Epoch: 0 Train: 4.42 KD: 11.755 Acc: 9.40 Singularity: -0.872 Det: 0.00000 Val: 0.00 KD: 0.000 Acc: 0.00
+Epoch: 1 Train: 4.34 KD: 5.126 Acc: 9.94 Singularity: -0.871 Det: 0.00000 Val: 0.00 KD: 0.000 Acc: 0.00
+### Adapting prototypes ###
+Epoch: 0 Train loss: 3.77 Val loss: 0.00 Singularity: -0.206 Det: 0.00000
+### Adaptation evaluation ###
+Old train mean diff: 4.69 ± 1.21
+New train mean diff: 3.87 ± 2.09
+Old train cov diff: 44.95 ± 27.45
+New train cov diff: 57.07 ± 43.28
+Old train norm-cov diff: 8.87 ± 1.92
+New train norm-cov diff: 21.34 ± 1.63
+Old train KLD: 9.09 ± 2.29
+New train KLD: 1864.76 ± 534.69
+
+Old val mean diff: 4.78 ± 1.64
+New val mean diff: 4.11 ± 2.19
+Old val cov diff: 48.66 ± 23.79
+New val cov diff: 58.20 ± 37.29
+Old val norm-cov diff: 10.56 ± 2.36
+New val norm-cov diff: 22.56 ± 1.83
+Old val KLD: 30.65 ± 2.86
+New val KLD: 1882.20 ± 518.85
+
+### Creating new prototypes ###
+
+Cov matrix det: tensor([0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 7.7555e-04, 1.7368e-02,
+        5.7891e-05, 7.6209e+03, 4.4056e-05, 9.1631e-10, 9.6310e+02, 1.9937e+00,
+        5.7612e-11, 2.9578e-02], device='cuda:0')
+Rank for class 0: 64, 6
+Rank for class 1: 64, 6
+Rank for class 2: 64, 6
+Rank for class 3: 64, 6
+Rank for class 4: 64, 6
+Rank for class 5: 64, 6
+Rank for class 6: 64, 6
+Rank for class 7: 64, 5
+Rank for class 8: 64, 5
+Rank for class 9: 64, 6
+Rank for class 10: 64, 9
+Rank for class 11: 64, 6
+Rank for class 12: 64, 7
+Rank for class 13: 64, 6
+Rank for class 14: 64, 8
+Rank for class 15: 64, 9
+Rank for class 16: 64, 9
+Rank for class 17: 64, 6
+Rank for class 18: 64, 5
+Rank for class 19: 64, 6
+Rank for class 20: 64, 14
+Rank for class 21: 64, 15
+Rank for class 22: 64, 12
+Rank for class 23: 64, 14
+Rank for class 24: 64, 13
+Rank for class 25: 64, 12
+Rank for class 26: 64, 14
+Rank for class 27: 64, 14
+Rank for class 28: 64, 16
+Rank for class 29: 64, 14
+Rank for class 30: 64, 51
+Rank for class 31: 64, 52
+Rank for class 32: 64, 56
+Rank for class 33: 64, 54
+Rank for class 34: 64, 53
+Rank for class 35: 64, 54
+Rank for class 36: 64, 56
+Rank for class 37: 64, 56
+Rank for class 38: 64, 55
+Rank for class 39: 64, 56
+Rank for class 40: 64, 64
+Rank for class 41: 64, 64
+Rank for class 42: 64, 64
+Rank for class 43: 64, 64
+Rank for class 44: 64, 64
+Rank for class 45: 64, 64
+Rank for class 46: 64, 64
+Rank for class 47: 64, 64
+Rank for class 48: 64, 64
+Rank for class 49: 64, 64
+### 0.95 of eigenvalues sum is explained by: ###
+Task 0: [36]
+Task 1: [34, 40]
+Task 2: [35, 40, 40]
+Task 3: [34, 38, 38, 40]
+Task 4: [34, 39, 37, 39, 38]
+### Norms per task: ###
+Means: [20.04, 20.83, 24.21, 25.47, 27.24]
+GT Means: [26.94, 26.1, 28.42, 27.76, 27.24]
+Covs: [62.67, 57.67, 56.64, 53.72, 100.38]
+GT Covs: [101.09, 88.96, 98.49, 96.59, 100.38]
+Inverted Covs: [744876.62, 150451.48, 13211.51, 544.35, 15.63]
+GT Inverted Covs: [16.68, 16.27, 15.2, 14.59, 15.63]
+Mahalanobis per task: [249.7897186279297, 207.29345703125, 191.1688690185547, 172.4439697265625, 166.59457397460938]
+------------------------------------------------------------------------------------------------------------
+>>> Train on task  0 : loss=0.000 | TAw acc= 25.6%, forg= 14.8%| TAg acc=  2.6%, forg= 37.8% <<<
+>>> Test on task  0 : loss=0.000 | TAw acc= 25.2%, forg= 14.5%| TAg acc=  2.9%, forg= 36.8% <<<
+Save at C:\Users\yumi\Documents\GitHub\IdeasLab\output\adagauss_quick\cifar100_icarl_ada_gauss_quick/
+>>> Train on task  1 : loss=0.000 | TAw acc= 24.8%, forg= 10.9%| TAg acc=  0.4%, forg= 34.1% <<<
+>>> Test on task  1 : loss=0.000 | TAw acc= 26.4%, forg=  8.1%| TAg acc=  0.5%, forg= 32.6% <<<
+Save at C:\Users\yumi\Documents\GitHub\IdeasLab\output\adagauss_quick\cifar100_icarl_ada_gauss_quick/
+>>> Train on task  2 : loss=0.000 | TAw acc= 30.4%, forg= 12.5%| TAg acc=  0.2%, forg= 41.8% <<<
+>>> Test on task  2 : loss=0.000 | TAw acc= 28.8%, forg= 12.0%| TAg acc=  0.4%, forg= 39.6% <<<
+Save at C:\Users\yumi\Documents\GitHub\IdeasLab\output\adagauss_quick\cifar100_icarl_ada_gauss_quick/
+>>> Train on task  3 : loss=0.000 | TAw acc= 26.9%, forg= 10.6%| TAg acc=  3.6%, forg= 31.8% <<<
+>>> Test on task  3 : loss=0.000 | TAw acc= 27.7%, forg=  7.7%| TAg acc=  3.8%, forg= 30.0% <<<
+Save at C:\Users\yumi\Documents\GitHub\IdeasLab\output\adagauss_quick\cifar100_icarl_ada_gauss_quick/
+>>> Train on task  4 : loss=0.000 | TAw acc= 44.1%, forg=  0.0%| TAg acc= 42.6%, forg=  0.0% <<<
+>>> Test on task  4 : loss=0.000 | TAw acc= 43.1%, forg=  0.0%| TAg acc= 41.6%, forg=  0.0% <<<
+Save at C:\Users\yumi\Documents\GitHub\IdeasLab\output\adagauss_quick\cifar100_icarl_ada_gauss_quick/
+************************************************************************************************************
+Task  5
+************************************************************************************************************
+### Training backbone ###
+The model has 11,201,664 trainable parameters
+The expert has 0 shared parameters
+
+Epoch: 0 Train: 3.59 KD: 8.947 Acc: 10.90 Singularity: -0.865 Det: 0.00000 Val: 0.00 KD: 0.000 Acc: 0.00
+Epoch: 1 Train: 3.54 KD: 3.613 Acc: 10.76 Singularity: -0.863 Det: 0.00000 Val: 0.00 KD: 0.000 Acc: 0.00
+### Adapting prototypes ###
+Epoch: 0 Train loss: 4.04 Val loss: 0.00 Singularity: -0.195 Det: 0.00000
+### Adaptation evaluation ###
+Old train mean diff: 3.18 ± 1.84
+New train mean diff: 3.87 ± 1.95
+Old train cov diff: 44.29 ± 36.00
+New train cov diff: 63.61 ± 44.56
+Old train norm-cov diff: 7.50 ± 2.49
+New train norm-cov diff: 24.15 ± 2.79
+Old train KLD: 7.35 ± 3.51
+New train KLD: 2047.54 ± 450.35
+
+Old val mean diff: 3.39 ± 1.75
+New val mean diff: 4.08 ± 1.72
+Old val cov diff: 53.08 ± 31.79
+New val cov diff: 66.08 ± 41.38
+Old val norm-cov diff: 10.31 ± 1.83
+New val norm-cov diff: 25.54 ± 2.67
+Old val KLD: 30.98 ± 5.43
+New val KLD: 1989.13 ± 455.65
+
+### Creating new prototypes ###
+
+Cov matrix det: tensor([0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 0.0000e+00, -0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00, 0.0000e+00,
+        0.0000e+00, 0.0000e+00, 8.3285e-04, 2.6141e+04, 3.0329e-06, 9.5881e+02,
+        7.8607e-07, 1.0949e+00, 8.9934e-10, 4.7404e-04, 2.2637e-10, 2.8739e-10],
+       device='cuda:0')
+Rank for class 0: 64, 5
+Rank for class 1: 64, 6
+Rank for class 2: 64, 6
+Rank for class 3: 64, 6
+Rank for class 4: 64, 5
+Rank for class 5: 64, 6
+Rank for class 6: 64, 6
+Rank for class 7: 64, 5
+Rank for class 8: 64, 5
+Rank for class 9: 64, 5
+Rank for class 10: 64, 7
+Rank for class 11: 64, 5
+Rank for class 12: 64, 6
+Rank for class 13: 64, 4
+Rank for class 14: 64, 6
+Rank for class 15: 64, 7
+Rank for class 16: 64, 6
+Rank for class 17: 64, 6
+Rank for class 18: 64, 4
+Rank for class 19: 64, 6
+Rank for class 20: 64, 7
+Rank for class 21: 64, 6
+Rank for class 22: 64, 7
+Rank for class 23: 64, 8
+Rank for class 24: 64, 6
+Rank for class 25: 64, 6
+Rank for class 26: 64, 6
+Rank for class 27: 64, 7
+Rank for class 28: 64, 9
+Rank for class 29: 64, 5
+Rank for class 30: 64, 12
+Rank for class 31: 64, 12
+Rank for class 32: 64, 15
+Rank for class 33: 64, 14
+Rank for class 34: 64, 13
+Rank for class 35: 64, 14
+Rank for class 36: 64, 16
+Rank for class 37: 64, 15
+Rank for class 38: 64, 14
+Rank for class 39: 64, 13
+Rank for class 40: 64, 54
+Rank for class 41: 64, 54
+Rank for class 42: 64, 56
+Rank for class 43: 64, 61
+Rank for class 44: 64, 56
+Rank for class 45: 64, 49
+Rank for class 46: 64, 57
+Rank for class 47: 64, 59
+Rank for class 48: 64, 49
+Rank for class 49: 64, 54
+Rank for class 50: 64, 64
+Rank for class 51: 64, 64
+Rank for class 52: 64, 64
+Rank for class 53: 64, 64
+Rank for class 54: 64, 64
+Rank for class 55: 64, 64
+Rank for class 56: 64, 64
+Rank for class 57: 64, 64
+Rank for class 58: 64, 64
+Rank for class 59: 64, 64
+### 0.95 of eigenvalues sum is explained by: ###
+Task 0: [36]
+Task 1: [34, 40]
+Task 2: [35, 40, 40]
+Task 3: [34, 38, 38, 40]
+Task 4: [34, 39, 37, 39, 38]
+Task 5: [35, 39, 37, 39, 37, 35]
+### Norms per task: ###
+Means: [20.28, 21.36, 25.09, 26.5, 28.34, 27.7]
+GT Means: [28.1, 27.13, 29.56, 28.94, 29.39, 27.7]
+Covs: [65.39, 58.1, 57.7, 53.92, 86.86, 93.07]
+GT Covs: [103.63, 97.37, 101.65, 103.14, 118.2, 93.07]
+Inverted Covs: [3291308.75, 905590.44, 157992.67, 12404.18, 539.93, 15.91]
+GT Inverted Covs: [15.77, 15.59, 14.55, 13.94, 14.69, 15.91]
+Mahalanobis per task: [268.80023193359375, 225.113037109375, 207.86866760253906, 193.73728942871094, 185.90867614746094, 189.17446899414062]
+------------------------------------------------------------------------------------------------------------
+>>> Train on task  0 : loss=0.000 | TAw acc= 23.5%, forg= 16.9%| TAg acc=  0.1%, forg= 40.4% <<<
+>>> Test on task  0 : loss=0.000 | TAw acc= 21.6%, forg= 18.1%| TAg acc=  0.3%, forg= 39.4% <<<
+Save at C:\Users\yumi\Documents\GitHub\IdeasLab\output\adagauss_quick\cifar100_icarl_ada_gauss_quick/
+>>> Train on task  1 : loss=0.000 | TAw acc= 23.1%, forg= 12.6%| TAg acc=  0.0%, forg= 34.6% <<<
+>>> Test on task  1 : loss=0.000 | TAw acc= 22.6%, forg= 11.9%| TAg acc=  0.0%, forg= 33.1% <<<
+Save at C:\Users\yumi\Documents\GitHub\IdeasLab\output\adagauss_quick\cifar100_icarl_ada_gauss_quick/
+>>> Train on task  2 : loss=0.000 | TAw acc= 28.4%, forg= 14.5%| TAg acc=  0.0%, forg= 42.1% <<<
+>>> Test on task  2 : loss=0.000 | TAw acc= 26.8%, forg= 14.0%| TAg acc=  0.1%, forg= 39.9% <<<
+Save at C:\Users\yumi\Documents\GitHub\IdeasLab\output\adagauss_quick\cifar100_icarl_ada_gauss_quick/
+>>> Train on task  3 : loss=0.000 | TAw acc= 21.8%, forg= 15.8%| TAg acc=  0.1%, forg= 35.3% <<<
+>>> Test on task  3 : loss=0.000 | TAw acc= 23.5%, forg= 11.9%| TAg acc=  0.0%, forg= 33.8% <<<
+Save at C:\Users\yumi\Documents\GitHub\IdeasLab\output\adagauss_quick\cifar100_icarl_ada_gauss_quick/
+>>> Train on task  4 : loss=0.000 | TAw acc= 33.1%, forg= 11.0%| TAg acc=  2.0%, forg= 40.6% <<<
+>>> Test on task  4 : loss=0.000 | TAw acc= 33.5%, forg=  9.6%| TAg acc=  2.1%, forg= 39.5% <<<
+Save at C:\Users\yumi\Documents\GitHub\IdeasLab\output\adagauss_quick\cifar100_icarl_ada_gauss_quick/
+>>> Train on task  5 : loss=0.000 | TAw acc= 45.5%, forg=  0.0%| TAg acc= 44.8%, forg=  0.0% <<<
+>>> Test on task  5 : loss=0.000 | TAw acc= 39.5%, forg=  0.0%| TAg acc= 38.8%, forg=  0.0% <<<
+Save at C:\Users\yumi\Documents\GitHub\IdeasLab\output\adagauss_quick\cifar100_icarl_ada_gauss_quick/
+************************************************************************************************************
+Task  6
+************************************************************************************************************
+### Training backbone ###
+The model has 11,201,664 trainable parameters
+The expert has 0 shared parameters
+
+Epoch: 0 Train: 3.27 KD: 10.640 Acc: 9.40 Singularity: -0.868 Det: 0.00000 Val: 0.00 KD: 0.000 Acc: 0.00
+Epoch: 1 Train: 3.19 KD: 4.280 Acc: 9.92 Singularity: -0.867 Det: 0.00000 Val: 0.00 KD: 0.000 Acc: 0.00
+### Adapting prototypes ###
+Epoch: 0 Train loss: 4.32 Val loss: 0.00 Singularity: -0.201 Det: 0.00000
