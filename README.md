@@ -86,6 +86,17 @@ Task-IL：提供任务 ID 时的平均准确率；Class-IL：不提供任务 ID�
 
 ---
 
+## Split CIFAR-100（10×10，与 AdaGauss 评估一致）
+
+将 MNIST 上的思路（多任务 head、正则等）迁移到 CIFAR-100，**评估结构与 AdaGauss 一致**：TAw / TAg、acc 矩阵、avg_accs、forgetting、BWT。结果可沿用 `scripts/plot_adagauss_results.py` 画曲线。
+
+- **运行**：`python split_cifar100/run_baseline.py`（完整）；快速试跑：`python split_cifar100/run_baseline.py --epochs 5`。
+- **结果目录**：`output/split_cifar100/experiments/`；每实验含 `results/acc_taw-*.txt`、`acc_tag-*.txt` 等（与 AdaGauss 同格式）。
+- **聚合**：`python scripts/aggregate_results.py` 会汇总 `split_mnist` 与 `split_cifar100`，见 [docs/experiment_results.md](docs/experiment_results.md)。
+- **MNIST 与 CIFAR-100 的结合方向**（slice margin、蒸馏、adapter 迁原型、双判别器等）：见 [docs/mnist_cifar100_combination.md](docs/mnist_cifar100_combination.md)。
+
+---
+
 ## 实验总结
 
 - **Split MNIST（无回放）**：当前最佳为 **Exp35（双判别器 + slice margin）**，Class-IL **50.20%**、BWT **-49.92%**。显式约束「正确 slice 比其它大一截」直接对准决策层 gap，收益最大。第二梯队（45%～47%）包括加强伪回放（Exp34）、anti-collapse（Exp39）、slice 一致性（Exp42）、EFM（Exp40）、双判别器+原型（Exp36）等。

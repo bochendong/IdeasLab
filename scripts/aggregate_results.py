@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-# ===== 聚合 MNIST / CIFAR-10 实验结果：横向对比 + 超参 =====
+# ===== 聚合 MNIST / CIFAR-100 实验结果：横向对比 + 超参 =====
 """
-扫描 output/split_mnist/experiments 与 output/split_cifar10/experiments，
+扫描 output/split_mnist/experiments 与 output/split_cifar100/experiments，
 生成：
-1) MNIST vs CIFAR-10 横向对比表（同一方法并排）
+1) MNIST vs CIFAR-100 横向对比表（同一方法并排）
 2) 全部实验表（含主要超参：lr, epochs, margin, lambda_* 等）
 
 用法（项目根目录）：
@@ -22,17 +22,20 @@ README_PATH = os.path.join(_PROJECT_ROOT, "README.md")
 DOCS_DIR = os.path.join(_PROJECT_ROOT, "docs")
 RESULTS_MD = os.path.join(DOCS_DIR, "experiment_results.md")
 
-# 用于横向对比的 run_name -> 统一方法键（便于 MNIST 与 CIFAR-10 并排）
+# 用于横向对比的 run_name -> 统一方法键（便于 MNIST 与 CIFAR-100 并排）
 RUN_NAME_TO_CROSS_KEY = {
-    # CIFAR-10
-    "cifar10_baseline": "baseline",
-    "cifar10_ewc": "ewc",
-    "cifar10_si": "si",
-    "cifar10_vae_si": "vae_si",
-    "cifar10_dual_discriminator": "dual_discriminator",
-    "cifar10_slice_margin": "slice_margin",
-    "cifar10_stronger_replay": "stronger_replay",
-    # MNIST 对应（取最新一次 run 的 run_name，与 CIFAR-10 对齐）
+    # CIFAR-100（split_cifar100 实验，run_all_experiments.py）
+    "cifar100_baseline": "baseline",
+    "cifar100_slice_margin": "slice_margin",
+    "cifar100_feat_kd": "feat_kd",
+    "cifar100_logit_kd": "logit_kd",
+    "cifar100_slice_margin_feat_kd": "slice_margin_feat_kd",
+    "cifar100_slice_margin_logit_kd": "slice_margin_logit_kd",
+    "cifar100_ewc": "ewc",
+    "cifar100_si": "si",
+    "cifar100_slice_margin_ewc": "slice_margin_ewc",
+    "cifar100_dual_discriminator": "dual_discriminator",
+    # MNIST
     "exp35_dual_discriminator_slice_margin": "slice_margin",
     "exp34_dual_discriminator_stronger_replay": "stronger_replay",
     "exp32_dual_discriminator": "dual_discriminator",
@@ -49,6 +52,11 @@ CROSS_KEY_TO_DISPLAY = {
     "vae_si": "VAE+SI",
     "dual_discriminator": "Dual discriminator",
     "slice_margin": "Slice margin",
+    "slice_margin_feat_kd": "Slice margin+Feat KD",
+    "slice_margin_logit_kd": "Slice margin+Logit KD",
+    "slice_margin_ewc": "Slice margin+EWC",
+    "feat_kd": "Feat KD",
+    "logit_kd": "Logit KD",
     "stronger_replay": "Stronger replay",
 }
 
@@ -118,8 +126,8 @@ def _short_hyperparams(config: dict) -> str:
     return ", ".join(parts[:8]) if parts else "—"
 
 
-def build_cross_table(mnist_runs, cifar_runs):
-    """构建横向对比：方法 | MNIST Class-IL | MNIST BWT | CIFAR-10 Class-IL | CIFAR-10 BWT"""
+def build_cross_table(mnist_runs, cifar100_runs):
+    """构建横向对比：方法 | MNIST Class-IL | MNIST BWT | CIFAR-100 Class-IL (TAg) ↑ | CIFAR-100 BWT |"""
     mnist_by_key = {}
     for run_name, metrics, config, _ in mnist_runs:
         key = RUN_NAME_TO_CROSS_KEY.get(run_name)
@@ -128,34 +136,33 @@ def build_cross_table(mnist_runs, cifar_runs):
                 metrics.get("final_avg_class_il"),
                 metrics.get("bwt"),
             )
-    cifar_by_key = {}
-    for run_name, metrics, config, _ in cifar_runs:
+    cifar100_by_key = {}
+    for run_name, metrics, config, _ in cifar100_runs:
         key = RUN_NAME_TO_CROSS_KEY.get(run_name)
         if key:
-            cifar_by_key[key] = (
+            cifar100_by_key[key] = (
                 metrics.get("final_avg_class_il"),
                 metrics.get("bwt"),
             )
-    # 没有 MNIST baseline run 时用 fallback
     if "baseline" not in mnist_by_key:
         mnist_by_key["baseline"] = (MNIST_BASELINE_FALLBACK[0] / 100.0, MNIST_BASELINE_FALLBACK[1] / 100.0)
 
-    order = ["baseline", "ewc", "si", "vae_si", "dual_discriminator", "slice_margin", "stronger_replay"]
+    order = ["baseline", "ewc", "si", "slice_margin", "feat_kd", "logit_kd", "slice_margin_feat_kd", "slice_margin_logit_kd", "slice_margin_ewc", "vae_si", "dual_discriminator", "stronger_replay"]
     lines = [
-        "| 方法 | MNIST Class-IL ↑ | MNIST BWT | CIFAR-10 Class-IL ↑ | CIFAR-10 BWT |",
-        "|------|------------------|-----------|----------------------|--------------|",
+        "| 方法 | MNIST Class-IL ↑ | MNIST BWT | CIFAR-100 Class-IL (TAg) ↑ | CIFAR-100 BWT |",
+        "|------|------------------|-----------|-----------------------------|---------------|",
     ]
     for key in order:
         if key not in CROSS_KEY_TO_DISPLAY:
             continue
         label = CROSS_KEY_TO_DISPLAY[key]
         m_ci, m_bwt = mnist_by_key.get(key, (None, None))
-        c_ci, c_bwt = cifar_by_key.get(key, (None, None))
+        c_ci, c_bwt = cifar100_by_key.get(key, (None, None))
         lines.append(f"| {label} | {_format_pct(m_ci)} | {_format_pct(m_bwt)} | {_format_pct(c_ci)} | {_format_pct(c_bwt)} |")
     return "\n".join(lines)
 
 
-def build_full_table(mnist_runs, cifar_runs):
+def build_full_table(mnist_runs, cifar100_runs):
     """全部实验 + 主要超参：数据集 | 实验名 | Class-IL | BWT | 主要超参"""
     lines = [
         "| 数据集 | 实验名 | Class-IL ↑ | BWT | 主要超参 |",
@@ -166,30 +173,30 @@ def build_full_table(mnist_runs, cifar_runs):
         bwt = metrics.get("bwt")
         short = _short_hyperparams(config)
         lines.append(f"| MNIST | {run_name} | {_format_pct(ci)} | {_format_pct(bwt)} | {short} |")
-    for run_name, metrics, config, _ in sorted(cifar_runs, key=lambda x: (-(x[1].get("final_avg_class_il") or 0), x[0])):
+    for run_name, metrics, config, _ in sorted(cifar100_runs, key=lambda x: (-(x[1].get("final_avg_class_il") or 0), x[0])):
         ci = metrics.get("final_avg_class_il")
         bwt = metrics.get("bwt")
         short = _short_hyperparams(config)
-        lines.append(f"| CIFAR-10 | {run_name} | {_format_pct(ci)} | {_format_pct(bwt)} | {short} |")
+        lines.append(f"| CIFAR-100 | {run_name} | {_format_pct(ci)} | {_format_pct(bwt)} | {short} |")
     return "\n".join(lines)
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Aggregate MNIST/CIFAR-10 results and hyperparams.")
+    parser = argparse.ArgumentParser(description="Aggregate MNIST/CIFAR-100 results and hyperparams.")
     parser.add_argument("--update-readme", action="store_true", help="Replace README block between AGGREGATE_TABLE markers.")
     args = parser.parse_args()
 
     mnist_runs = _load_latest_per_run("split_mnist")
-    cifar_runs = _load_latest_per_run("split_cifar10")
+    cifar100_runs = _load_latest_per_run("split_cifar100")
 
-    cross_md = build_cross_table(mnist_runs, cifar_runs)
-    full_md = build_full_table(mnist_runs, cifar_runs)
+    cross_md = build_cross_table(mnist_runs, cifar100_runs)
+    full_md = build_full_table(mnist_runs, cifar100_runs)
 
     body = f"""# 实验结果汇总（自动生成）
 
-运行 `python scripts/aggregate_results.py` 生成。数据来自 `output/split_mnist/experiments` 与 `output/split_cifar10/experiments`（每实验取最新一次 run）。
+运行 `python scripts/aggregate_results.py` 生成。数据来自 `output/split_mnist/experiments` 与 `output/split_cifar100/experiments`（每实验取最新一次 run）。
 
-## MNIST vs CIFAR-10 横向对比
+## MNIST vs CIFAR-100 横向对比
 
 {cross_md}
 
@@ -214,12 +221,11 @@ def main():
         end_marker = "<!-- END_AGGREGATE_TABLE -->"
         if start_marker not in content or end_marker not in content:
             # 在「Split CIFAR-10 实验结果」段落后插入新段
-            insert = "\n\n## MNIST vs CIFAR-10 横向对比与超参\n\n"
+            insert = "\n\n## MNIST vs CIFAR-100 横向对比与超参\n\n"
             insert += "以下横向对比表由 `python scripts/aggregate_results.py` 生成（每数据集每方法取最新一次 run）。\n\n"
             insert += cross_md + "\n\n"
             insert += "**全部实验及主要超参**见 [docs/experiment_results.md](docs/experiment_results.md)。每实验完整超参见 `output/<数据集>/experiments/<实验目录>/config.json`。\n"
-            # 插入在 "## Split CIFAR-10 实验结果" 与 "结果目录" 之间的段落之后、下一个 ## 之前
-            target = "结果目录：`output/split_cifar10/experiments/`"
+            target = "结果目录：`output/split_cifar100/experiments/`"
             if target in content:
                 idx = content.find(target)
                 end_of_para = content.find("\n\n", idx)

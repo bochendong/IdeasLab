@@ -1,11 +1,11 @@
 # 实验结果汇总（自动生成）
 
-运行 `python scripts/aggregate_results.py` 生成。数据来自 `output/split_mnist/experiments` 与 `output/split_cifar10/experiments`（每实验取最新一次 run）。
+运行 `python scripts/aggregate_results.py` 生成。数据来自 `output/split_mnist/experiments` 与 `output/split_cifar100/experiments`（每实验取最新一次 run）。
 
-## MNIST vs CIFAR-10 横向对比
+## MNIST vs CIFAR-100 横向对比
 
-| 方法 | MNIST Class-IL ↑ | MNIST BWT | CIFAR-10 Class-IL ↑ | CIFAR-10 BWT |
-|------|------------------|-----------|----------------------|--------------|
+| 方法 | MNIST Class-IL ↑ | MNIST BWT | CIFAR-100 Class-IL (TAg) ↑ | CIFAR-100 BWT |
+|------|------------------|-----------|-----------------------------|---------------|
 | Baseline | 25.69% | -92.21% | 27.03% | -81.89% |
 | EWC | 29.02% | -87.92% | 27.03% | -81.89% |
 | SI | 34.15% | -80.88% | 27.03% | -81.89% |

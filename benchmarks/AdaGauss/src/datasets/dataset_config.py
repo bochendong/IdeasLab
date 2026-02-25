@@ -19,24 +19,7 @@ dataset_config = {
         'flip': False,
         'normalize': ((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
     },
-    'cifar10': {
-        'path': join(_BASE_DATA_PATH, 'cifar10'),
-        'resize': None,
-        'pad': 4,
-        'crop': 32,
-        'flip': True,
-        'normalize': ((0.4914, 0.4822, 0.4465), (0.2470, 0.2435, 0.2616))
-    },
-    'cifar10_5t': {
-        'path': join(_BASE_DATA_PATH, 'cifar10'),
-        'resize': None,
-        'pad': 4,
-        'crop': 32,
-        'flip': True,
-        'normalize': ((0.4914, 0.4822, 0.4465), (0.2470, 0.2435, 0.2616)),
-        'class_order': list(range(10))
-    },
-    # 使用 cifar100_100 子目录，避免与 data/cifar100 里误放的 CIFAR-10 混用
+    # CIFAR-10 已移除，仅保留 CIFAR-100。数据目录使用 cifar100_100 子目录
     'cifar100': {
         'path': join(_BASE_DATA_PATH, 'cifar100_100'),
         'resize': None,
